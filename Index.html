@@ -1,147 +1,916 @@
 <!doctype html>
 <html lang="id">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Presensi KS · LINETOGEL</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root{--ink:#16343d;--navy:#102c35;--mint:#dff4e9;--green:#16755e;--green-dark:#105641;--paper:#f4f7f6;--muted:#73868a;--line:#e3ebe7;--amber:#a86d19;--white:#fff;--shadow:0 8px 40px #15392c07}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:14px}button,input{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.55}button,input{outline-offset:4px}button:focus-visible,input:focus-visible{outline:2px solid var(--green)}button{transition:background .15s,transform .15s}button:active:not(:disabled){transform:translateY(1px)}[hidden]{display:none!important}h1,h2,h3,p{margin:0}h1,h2,h3,.num{font-family:Manrope,sans-serif}svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}.brand{display:flex;align-items:center;gap:12px;font-family:Manrope;font-size:17px;font-weight:800;letter-spacing:1px}.brandmark{width:38px;height:38px;border-radius:12px;background:#b8efd5;display:grid;place-items:center;color:var(--navy)}.brand small{display:block;font-size:9px;letter-spacing:2px;margin-top:3px;font-weight:600;opacity:.6}.eyebrow{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase}.muted{color:var(--muted)}
-/* Sidebar */
-.sidebar{position:fixed;inset:0 auto 0 0;width:236px;background:var(--navy);color:white;padding:34px 24px;display:flex;flex-direction:column;z-index:5}.sidebar .brand{margin-bottom:55px}.nav-label{font-size:10px;color:#7e9ca4;letter-spacing:2px;margin:0 12px 13px}.nav-item{display:flex;align-items:center;gap:12px;padding:14px;border-radius:11px;font-weight:600;color:#d2dfdf;margin-bottom:7px;text-decoration:none}.nav-item.active{background:#28464d;color:#d3f5e5}.nav-item.active:after{content:'';width:6px;height:6px;border-radius:50%;background:#b8efd5;margin-left:auto}.side-bottom{margin-top:auto}.side-note{padding:18px;border:1px solid #345158;border-radius:14px;color:#9db3b9;font-size:12px;line-height:1.7}.side-note b{color:#d3e6e4;display:block;margin-bottom:5px}.side-foot{font-size:10px;color:#78949b;margin-top:24px;letter-spacing:1px}.workspace{margin-left:236px;padding:0 42px 35px;max-width:1800px}.topbar{height:92px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);gap:18px}.crumb{color:var(--muted);font-size:12px}.crumb b{color:var(--ink);margin-left:8px;font-weight:500}.top-right{display:flex;align-items:center;gap:20px}.connection{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted)}.dot{width:6px;height:6px;border-radius:50%;background:var(--green)}.connection.offline .dot{background:#c08432}.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#e5ece8;color:#49695e;font-size:11px;font-weight:700}.icon-btn{background:transparent;border:1px solid var(--line);width:35px;height:35px;border-radius:9px;display:grid;place-items:center;color:var(--ink)}.heading{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;padding:34px 0 26px}.heading h1{font-size:30px;font-weight:800;letter-spacing:-1px;margin-top:8px}.heading p{color:var(--muted);margin-top:8px;font-size:13px}.date-pill{padding:11px 14px;border-radius:9px;background:white;border:1px solid var(--line);display:flex;align-items:center;gap:9px;white-space:nowrap;font-size:11px}.date-pill svg{width:16px;height:16px;color:var(--green)}.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:24px}.metric{background:white;border:1px solid var(--line);border-radius:15px;padding:20px 22px;box-shadow:var(--shadow)}.metric-top{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted)}.metric-top svg{width:18px;height:18px}.metric .num{font-size:34px;letter-spacing:-1px;font-weight:800;margin-top:12px;line-height:1.2}.metric small{font-size:10px;color:var(--muted);display:block;margin-top:8px}.metric.green{background:#e4f2e9;border-color:#d3e8db}.metric.green .num,.metric.green .metric-top{color:#176044}.metric.amber .num{color:var(--amber)}
-.content-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}.panel{background:white;border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow);overflow:hidden}.panel-head{padding:24px 24px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px}.panel-head h2{font-size:16px;font-weight:800;letter-spacing:-.3px}.panel-head p{font-size:11px;color:var(--muted);margin-top:5px}.small-tag{border:1px solid var(--line);padding:5px 9px;border-radius:7px;font-size:10px;color:var(--muted)}.table-tools{padding:0 24px 20px;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.filters{display:flex;gap:4px;background:#f2f5f3;padding:4px;border-radius:9px}.filter{border:0;background:transparent;border-radius:6px;color:var(--muted);font-size:11px;padding:7px 11px;white-space:nowrap}.filter.active{background:white;color:var(--ink);font-weight:700;box-shadow:0 1px 4px #112d3610}.search{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:190px}.search svg{width:15px;height:15px;color:var(--muted)}.search input{border:0;background:none;min-width:0;width:100%;font-size:11px;color:var(--ink)}table{width:100%;border-collapse:collapse;text-align:left}th{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);background:#f7f9f8;padding:13px 20px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}td{padding:15px 20px;border-bottom:1px solid #edf1ee;font-size:11px}td:first-child,th:first-child{padding-left:24px}tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#fbfdfb}.staff{display:flex;align-items:center;gap:11px}.staff .avatar{width:34px;height:34px;border-radius:10px;flex-shrink:0;background:#eaf1ee;color:#496f5d}.staff-name{font-size:11px;font-weight:700;line-height:1.5}.staff-id{font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:.4px}.you{font-size:8px;display:inline-block;background:#e5f2eb;border-radius:4px;padding:2px 4px;color:var(--green);margin-left:4px}.role{color:var(--muted);font-size:10px;white-space:nowrap}.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:6px;font-size:9px;font-weight:600;white-space:nowrap;background:#f0f2f4;color:#6b7d84}.badge:before{content:'';width:4px;height:4px;background:currentColor;border-radius:50%}.badge.HADIR{background:#e5f4eb;color:#237855}.badge.BELUM{background:#fff4de;color:#a27425}.badge.CUTI{background:#eeeaf8;color:#7d61a8}.table-footer{padding:15px 24px;display:flex;justify-content:space-between;font-size:10px;color:var(--muted);background:#fcfdfc;border-top:1px solid var(--line)}.empty{text-align:center;padding:50px 20px;color:var(--muted);font-size:12px}.right-col{display:flex;flex-direction:column;gap:20px}.checkin{background:var(--navy);color:white;border:0;padding:24px;position:relative;overflow:hidden}.checkin:before{content:'';position:absolute;width:220px;height:220px;border:1px solid #5a918344;border-radius:50%;right:-130px;top:-95px;box-shadow:0 0 0 25px #5a91830c,0 0 0 50px #5a918308;pointer-events:none}.checkin .eyebrow{color:#9bb7b8;font-size:9px}.checkin-head{display:flex;justify-content:space-between;align-items:center}.check-icon{color:#c1efd8;display:grid;place-items:center;width:34px;height:34px;border:1px solid #4b6d70;border-radius:10px}.checkin h2{font-size:21px;font-weight:700;letter-spacing:-.4px;line-height:1.5;margin-top:20px}.checkin .id{font-size:10px;color:#a5bdbf;margin-top:7px;letter-spacing:1px}.check-date{display:flex;align-items:flex-start;gap:9px;padding:17px 0;margin:18px 0;border-top:1px solid #345058;border-bottom:1px solid #345058;font-size:11px;color:#cadbd8;line-height:1.6}.check-date svg{width:16px;height:16px}.primary{background:#b9efd2;color:#163b2f;border:0;border-radius:9px;padding:13px 16px;display:flex;align-items:center;justify-content:center;gap:9px;font-weight:700;width:100%;font-size:12px;min-height:44px}.primary:hover:not(:disabled){background:#a7e7c4}.checkin .hint{text-align:center;color:#93afb0;font-size:10px;margin-top:13px;line-height:1.6}.secondary{background:none;color:var(--green);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font-size:11px}.progress-panel{padding:22px}.progress-panel h3,.history-panel h3{font-size:13px;font-weight:800}.progress-wrap{display:flex;align-items:center;gap:20px;margin-top:22px}.ring{width:88px;height:88px;border-radius:50%;background:conic-gradient(var(--green) calc(var(--percent,0)*1%),#edf3ef 0);position:relative;display:grid;place-items:center;flex-shrink:0}.ring:before{content:'';position:absolute;inset:8px;background:white;border-radius:50%}.ring b{position:relative;font-family:Manrope;font-size:21px;letter-spacing:-.8px}.legend{font-size:10px;color:var(--muted);line-height:2}.legend strong{font-size:17px;color:var(--ink);font-family:Manrope;display:block;line-height:1.6}.history-panel{padding:22px}.history-list{margin-top:12px}.history-row{padding:12px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;font-size:10px;gap:7px}.history-row:last-child{border:0}.history-row span:last-child{color:var(--green)}.footer{font-size:10px;color:#8ca09f;display:flex;justify-content:space-between;margin-top:26px}.mobile-brand{display:none}.alert{border:1px solid #e5cb95;background:#fff8e7;color:#89621d;border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:12px;line-height:1.7}.loading{height:200px;background:linear-gradient(110deg,#f4f7f5 20%,#fff 40%,#f4f7f5 60%);background-size:200% 100%;animation:shimmer 1.4s infinite}@keyframes shimmer{to{background-position:-200% 0}}.spin{animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
-/* Login */
-.login-page{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;background:white}.login-art{background:var(--navy);padding:55px 65px;color:white;display:flex;flex-direction:column;position:relative;overflow:hidden}.login-art:after{content:'';position:absolute;width:650px;height:650px;border:1px solid #396158;border-radius:50%;bottom:-420px;left:-130px;box-shadow:0 0 0 60px #39615822,0 0 0 120px #39615815}.login-art .hero-copy{margin:auto 0;position:relative;z-index:1;padding:70px 0}.hero-copy .eyebrow{color:#afd9c7}.hero-copy h1{font-size:clamp(35px,4vw,57px);line-height:1.2;letter-spacing:-2px;font-weight:600;margin-top:20px}.hero-copy h1 em{font-style:normal;color:#b8efd5}.hero-copy p{color:#a8bec1;line-height:1.9;margin-top:25px;max-width:340px;font-size:13px}.login-art footer{font-size:10px;letter-spacing:1px;color:#8cabae}.login-form-area{display:grid;place-items:center;padding:40px}.login-box{width:100%;max-width:345px}.login-box .eyebrow{color:var(--green)}.login-box h2{font-size:28px;margin:14px 0 10px;letter-spacing:-.8px}.login-box p{font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:32px}.field{display:block;margin-bottom:19px}.field>span{display:block;font-size:11px;font-weight:600;margin-bottom:9px}.field input{width:100%;padding:13px 14px;border:1px solid #dbe5e0;background:#fbfcfb;border-radius:8px;font-size:13px;color:var(--ink);min-height:45px}.password-field{position:relative}.password-field input{padding-right:65px}.password-field button{position:absolute;right:8px;top:8px;background:none;border:0;font-size:10px;color:var(--green);padding:8px}.login-box .primary{background:var(--green);color:white;margin-top:8px}.login-box .primary:hover{background:var(--green-dark)}.login-bottom{font-size:10px;color:var(--muted);text-align:center;margin-top:24px;line-height:1.8}.error{color:#ae4a3e;font-size:12px;line-height:1.6;min-height:22px;margin-top:12px}.toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);padding:14px 22px;border-radius:11px;background:var(--navy);color:white;font-size:12px;box-shadow:0 10px 30px #102c3530;z-index:30;max-width:90%;text-align:center}.modal-backdrop{position:fixed;inset:0;background:#102c3588;display:grid;place-items:center;padding:20px;z-index:20;backdrop-filter:blur(4px)}.modal{background:white;border-radius:18px;max-width:420px;width:100%;padding:30px}.modal h2{font-size:21px;margin-bottom:10px}.modal p{font-size:12px;line-height:1.8;color:var(--muted);margin-bottom:24px}.modal .secondary{margin-top:10px;width:100%}
-@media(min-width:1500px){.workspace{padding-left:55px;padding-right:55px}.content-grid{grid-template-columns:minmax(0,1fr) 330px}.metric{padding:23px 26px}td{padding-top:18px;padding-bottom:18px}}
-@media(max-width:1200px){.sidebar{width:195px;padding:30px 18px}.workspace{margin-left:195px;padding:0 24px 25px}.content-grid{gap:18px;grid-template-columns:minmax(0,1fr) 265px}.table-tools,.panel-head{padding-left:18px;padding-right:18px}.metric{padding:18px 16px}.metric .num{font-size:30px}.table-tools{align-items:stretch}.search{width:100%}.heading h1{font-size:26px}}
-@media(max-width:960px){.sidebar{display:none}.workspace{margin-left:0}.crumb{display:none}.mobile-brand{display:flex;font-size:13px;letter-spacing:.5px}.mobile-brand .brandmark{width:30px;height:30px;border-radius:9px}.topbar{height:75px}.content-grid{grid-template-columns:minmax(0,1fr) 265px}.heading{padding-top:27px}.login-art{padding:40px 35px}.login-art h1{font-size:38px}}
-@media(max-width:700px){.workspace{padding:0 16px 22px}.topbar{height:68px}.top-right{gap:10px}.top-right>.avatar{display:none}.connection{font-size:9px}.heading{display:block;padding:24px 0 20px}.heading h1{font-size:27px}.date-pill{display:inline-flex;margin-top:16px;font-size:10px;background:transparent;padding:0;border:0}.summary-grid{grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:18px}.metric{padding:16px 18px;border-radius:12px}.metric .num{font-size:29px;margin-top:10px}.metric small{font-size:9px;margin-top:5px}.metric-top{font-size:10px}.content-grid{display:flex;flex-direction:column;gap:18px}.right-col{display:contents}.checkin{order:-2;width:100%;padding:21px}.checkin h2{font-size:20px;margin-top:13px}.checkin .id{margin-top:4px}.check-date{padding:12px 0;margin:13px 0}.checkin .hint{margin-top:9px}.attendance-panel{width:100%}.progress-panel{order:-1;width:100%;padding:17px 20px;display:flex;align-items:center;justify-content:space-between}.progress-wrap{margin-top:0;gap:12px}.ring{width:56px;height:56px}.ring:before{inset:5px}.ring b{font-size:15px}.progress-panel h3{font-size:12px;max-width:100px;line-height:1.6}.legend{font-size:9px}.legend strong{font-size:13px}.history-panel{width:100%}.panel-head{padding:20px 18px 16px}.panel-head h2{font-size:15px}.table-tools{padding:0 14px 16px}.filters{width:100%;justify-content:space-between}.filter{padding:8px 10px;font-size:10px;flex:1}.search{width:100%;padding:10px}.role-col,.time-col{display:none}th,td{padding:14px 13px}td:first-child,th:first-child{padding-left:16px}.staff{gap:9px}.staff-name{font-size:10px}.staff .avatar{width:30px;height:30px;font-size:9px}.staff-id{font-size:9px}.badge{font-size:8px;padding:5px 7px}.table-footer{padding:14px 16px;font-size:9px}.footer{font-size:8px}.login-page{grid-template-columns:1fr}.login-art{padding:24px;min-height:220px}.login-art .hero-copy{padding:25px 0 5px}.login-art h1{font-size:31px;letter-spacing:-1px;margin-top:12px}.login-art .hero-copy p,.login-art footer{display:none}.login-form-area{padding:35px 25px}.login-box h2{font-size:25px}.login-box p{margin-bottom:25px}.modal{padding:24px}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-</style>
-</head><body>
-<svg hidden aria-hidden="true"><symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="m7 12 3 3 7-7"/><rect x="3" y="3" width="18" height="18" rx="6"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-14 5h3m4 0h3"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2m2-15a3 3 0 0 1 0 6m1 4a5 5 0 0 1 3 5"/></symbol><symbol id="i-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol><symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 3C7 2 3 7 5 14s13 7 15-11Z M4 21 14 11"/></symbol><symbol id="i-search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></symbol><symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5M5 8a8 8 0 0 1 13-3l2 3M4 16l2 3a8 8 0 0 0 13-3"/></symbol><symbol id="i-exit" viewBox="0 0 24 24"><path d="M10 4H5v16h5m4-12 4 4-4 4m-5-4h12"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol><symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/></symbol></svg>
-<section id="loginPage" class="login-page">
- <div class="login-art"><div class="brand"><span class="brandmark"><svg><use href="#i-check"/></svg></span><div>LINETOGEL<small>PEOPLE & OPERATIONS</small></div></div><div class="hero-copy"><div class="eyebrow">Presensi harian · Khusus KS</div><h1>Mulai hari.<br>Catat hadir.<br><em>Siap bersama.</em></h1><p>Satu tempat untuk mencatat kehadiran dan melihat kabar tim setiap hari.</p></div><footer>LINETOGEL / KS ATTENDANCE</footer></div>
- <div class="login-form-area"><form class="login-box" id="loginForm"><div class="eyebrow">Selamat datang kembali</div><h2>Masuk ke presensi.</h2><p>Gunakan username staff dan password untuk mencatat kehadiran.</p><label class="field"><span>Username</span><input id="loginUsername" autocomplete="username" placeholder="Masukkan username staff" required maxlength="100" autocapitalize="none" spellcheck="false"></label><label class="field"><span>Password</span><div class="password-field"><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Masukkan password" required maxlength="128"><button type="button" id="togglePassword" aria-label="Tampilkan password">Lihat</button></div></label><button class="primary" id="loginButton" type="submit">Masuk ke dashboard <svg><use href="#i-arrow"/></svg></button><div id="loginError" class="error" role="alert"></div><div id="localNotice" class="login-bottom" hidden>File ini perlu dibuka melalui link Web App Apps Script agar bisa login dan absen.</div><div class="login-bottom">Lupa password? Hubungi pengelola absensi KS.</div></form></div>
-</section>
-<div id="app" hidden>
- <aside class="sidebar"><div class="brand"><span class="brandmark"><svg><use href="#i-check"/></svg></span><div>LINETOGEL<small>PEOPLE & OPERATIONS</small></div></div><div class="nav-label">WORKSPACE</div><a class="nav-item active" href="#dashboard"><svg><use href="#i-grid"/></svg>Dashboard</a><a class="nav-item" href="#presensiSaya"><svg><use href="#i-check"/></svg>Absen Masuk</a><a class="nav-item" href="#myHistory"><svg><use href="#i-calendar"/></svg>Riwayat saya</a><div class="side-bottom"><div class="side-note"><b>Setiap hari, satu langkah.</b>Catat kehadiranmu dan pantau tim dalam satu halaman.</div><div class="side-foot">PRESENSI KS / LINETOGEL</div></div></aside>
- <main class="workspace" id="dashboard"><header class="topbar"><div class="crumb">Workspace <b>/ Dashboard KS</b></div><div class="brand mobile-brand"><span class="brandmark"><svg><use href="#i-check"/></svg></span>LINETOGEL</div><div class="top-right"><span class="connection" id="connection" role="status"><span class="dot"></span><span id="connectionText">Menghubungkan</span></span><div class="avatar" id="topAvatar">KS</div><button class="icon-btn" id="passwordOpen" title="Ganti password" aria-label="Ganti password"><svg><use href="#i-lock"/></svg></button><button class="icon-btn" id="logout" title="Keluar" aria-label="Keluar"><svg><use href="#i-exit"/></svg></button></div></header>
- <section class="heading"><div><div class="eyebrow muted">Kehadiran tim, dalam satu pandangan</div><h1>Dashboard presensi<span style="color:#73a18c">.</span></h1><p>Selamat datang, <span id="greeting">tim KS</span>.</p></div><div class="date-pill"><svg><use href="#i-calendar"/></svg><span id="dateLabel">Memuat tanggal…</span></div></section>
- <div id="syncError" class="alert" hidden role="alert"></div>
- <section class="summary-grid" aria-label="Ringkasan hari ini"><div class="metric"><div class="metric-top">Total staff KS <svg><use href="#i-users"/></svg></div><div class="num" id="total">—</div><small>Akun staff aktif</small></div><div class="metric green"><div class="metric-top">Sudah hadir <svg><use href="#i-check"/></svg></div><div class="num" id="present">—</div><small>Kehadiran tercatat hari ini</small></div><div class="metric amber"><div class="metric-top">Belum absen <svg><use href="#i-circle"/></svg></div><div class="num" id="absent">—</div><small>Menunggu konfirmasi hadir</small></div><div class="metric"><div class="metric-top">Off / cuti <svg><use href="#i-leaf"/></svg></div><div class="num" id="off">—</div><small>Tidak wajib absen hari ini</small></div></section>
- <div class="content-grid"><section class="panel attendance-panel"><div class="panel-head"><div><h2>Kehadiran tim</h2><p>Daftar presensi harian seluruh staff KS.</p></div><button class="icon-btn" id="refresh" title="Perbarui data" aria-label="Perbarui data"><svg><use href="#i-refresh"/></svg></button></div><div class="table-tools"><div class="filters" aria-label="Filter kehadiran"><button class="filter active" data-filter="ALL" aria-pressed="true">Semua</button><button class="filter" data-filter="HADIR" aria-pressed="false">Hadir</button><button class="filter" data-filter="BELUM" aria-pressed="false">Belum</button><button class="filter" data-filter="OFF" aria-pressed="false">Off / cuti</button></div><label class="search"><svg><use href="#i-search"/></svg><input id="search" placeholder="Cari nama atau ID…" aria-label="Cari nama atau ID staff"></label></div><div id="tableLoading" class="loading" aria-label="Memuat daftar staff"></div><table id="staffTable" hidden><thead><tr><th>Nama staff</th><th class="role-col">Bagian</th><th>Status hari ini</th><th class="time-col">Jam masuk</th></tr></thead><tbody id="staffRows"></tbody></table><div id="empty" class="empty" hidden>Tidak ada staff yang sesuai pencarian.</div><div class="table-footer"><span id="rowCount">Memuat staff…</span><span>Zona waktu: WIB</span></div></section>
- <aside class="right-col"><section class="panel checkin" id="presensiSaya" aria-labelledby="presenceTitle"><div class="checkin-head"><div class="eyebrow" id="presenceTitle">Presensi saya</div><div class="check-icon"><svg><use href="#i-check"/></svg></div></div><h2 id="myName">Memuat akun…</h2><div class="id" id="myId">KS · —</div><div class="check-date"><svg><use href="#i-calendar"/></svg><span id="myDate">Memuat tanggal…</span></div><button class="primary" id="mark" disabled><svg><use href="#i-check"/></svg><span id="markLabel">Absen Masuk</span></button><p class="hint" id="markHint">Absen sekali per hari (WIB).</p></section><section class="panel progress-panel"><h3>Progres kehadiran</h3><div class="progress-wrap"><div class="ring" id="ring"><b id="percentage">0%</b></div><div class="legend"><strong id="progressCount">— / — staff</strong>Hadir dari staff wajib absen</div></div></section><section class="panel history-panel" id="myHistory"><h3>Riwayat saya</h3><p class="muted" style="font-size:10px;margin-top:6px">7 catatan kehadiran terakhir</p><div class="history-list" id="historyList"><div class="empty">Memuat riwayat…</div></div></section></aside></div><footer class="footer"><span>LINETOGEL · PRESENSI KS</span><span>Zona waktu WIB</span></footer></main>
-</div>
-<div class="modal-backdrop" id="passwordModal" hidden><form class="modal" id="passwordForm" role="dialog" aria-modal="true" aria-labelledby="passwordTitle"><h2 id="passwordTitle">Ganti password</h2><p id="passwordDescription">Gunakan password baru minimal 8 karakter.</p><label class="field"><span>Password saat ini</span><input type="password" id="currentPassword" autocomplete="current-password" required maxlength="128"></label><label class="field"><span>Password baru</span><input type="password" id="newPassword" autocomplete="new-password" required minlength="8" maxlength="128"></label><label class="field"><span>Ulangi password baru</span><input type="password" id="confirmPassword" autocomplete="new-password" required minlength="8" maxlength="128"></label><button class="primary" id="savePassword">Simpan password</button><button class="secondary" type="button" id="cancelPassword">Batal</button><div id="passwordError" class="error" role="alert"></div></form></div>
-<div class="toast" id="toast" role="status" hidden></div>
-<script>
-'use strict';
-const $=id=>document.getElementById(id);
-const hasServer=Boolean(window.google?.script?.run);
-const SESSION_KEY='linetogel_ks_v21_1FwfEh5z';
-const state={token:'',user:null,date:'',data:[],history:[],filter:'ALL',loading:false,marking:false,changing:false,timer:null,epoch:0,ready:false};
-let toastTimer;
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const initials=name=>String(name||'KS').trim().split(/\s+/).slice(0,2).map(s=>s[0]).join('').toUpperCase();
-const statusName=s=>({HADIR:'Sudah hadir',BELUM:'Belum absen',OFFDAY:'Offday',CUTI:'Cuti',LIBUR:'Libur'}[s]||s);
-function toast(message){clearTimeout(toastTimer);$('toast').textContent=message;$('toast').hidden=false;toastTimer=setTimeout(()=>$('toast').hidden=true,4000);}
-function saveToken(token){state.token=token;try{localStorage.setItem(SESSION_KEY,token);}catch(e){toast('Penyimpanan browser dibatasi; sesi berlaku selama halaman terbuka.');}}
-function showApp(){ $('loginPage').hidden=true;$('app').hidden=false; }
-function logout(message=''){
- state.epoch++;state.token='';state.user=null;state.ready=false;state.data=[];state.date='';state.loading=false;state.marking=false;state.changing=false;
- clearTimeout(state.timer);try{localStorage.removeItem(SESSION_KEY);}catch(e){}
- $('app').hidden=true;$('loginPage').hidden=false;$('passwordModal').hidden=true;$('loginError').textContent=message;$('loginPassword').value='';
- $('staffRows').innerHTML='';$('staffTable').hidden=true;$('tableLoading').hidden=false;$('loginButton').disabled=false;$('loginButton').innerHTML='Masuk ke dashboard <svg><use href="#i-arrow"/></svg>';
-}
-function call(action,p={}){
- return new Promise((resolve,reject)=>{
-  if(!hasServer){reject(new Error('Buka dashboard dari link Web App Apps Script setelah deployment.'));return;}
-  google.script.run.withSuccessHandler(resolve).withFailureHandler(e=>reject(new Error(e.message||'Koneksi gagal. Coba kembali.'))).apiKS(action,{...p,token:state.token});
- });
-}
-function connected(ok){$('connection').classList.toggle('offline',!ok);$('connectionText').textContent=ok?'Tersinkron':'Koneksi terputus';}
-function schedule(){clearTimeout(state.timer);if(state.token)state.timer=setTimeout(()=>load(),30000);}
-async function load(){
- if(!state.token||state.loading||state.marking||state.changing||document.hidden){schedule();return;}
- const epoch=state.epoch;const requestToken=state.token;state.loading=true;$('refresh').disabled=true;updateMark();$('refresh').querySelector('svg').classList.add('spin');
- try{
-  const r=await call('load');if(epoch!==state.epoch||requestToken!==state.token)return;
-  if(r.expired){logout(r.message);return;}if(!r.ok)throw new Error(r.message);
-  state.user=r.user;state.date=r.date;state.data=r.data;state.history=r.history;state.ready=true;
-  connected(true);$('syncError').hidden=true;render(r.dateLabel);if(r.user.mustChange&&$('passwordModal').hidden)openPassword(true);
- }catch(e){if(epoch!==state.epoch)return;connected(false);state.ready=false;$('syncError').textContent='Data belum diperbarui: '+e.message;$('syncError').hidden=false;updateMark();}
- finally{if(epoch===state.epoch){state.loading=false;$('refresh').disabled=false;updateMark();$('refresh').querySelector('svg').classList.remove('spin');schedule();}}
-}
-function render(dateLabel){
- const present=state.data.filter(s=>s.status==='HADIR').length,absent=state.data.filter(s=>s.status==='BELUM').length,off=state.data.length-present-absent;
- $('total').textContent=state.data.length;$('present').textContent=present;$('absent').textContent=absent;$('off').textContent=off;
- $('greeting').textContent=state.user.name.split(' ')[0];$('topAvatar').textContent=initials(state.user.name);$('myName').textContent=state.user.name;$('myId').textContent=state.user.id+' · KS';
- $('dateLabel').textContent=dateLabel+' · WIB';$('myDate').textContent=dateLabel;
- const pct=present+absent?Math.round(present/(present+absent)*100):0;$('ring').style.setProperty('--percent',pct);$('percentage').textContent=pct+'%';$('progressCount').textContent=present+' / '+(present+absent)+' staff';
- $('historyList').innerHTML=state.history.length?state.history.map(h=>`<div class="history-row"><span>${esc(new Date(h.date+'T12:00:00+07:00').toLocaleDateString('id-ID',{timeZone:'Asia/Jakarta',day:'numeric',month:'short',year:'numeric'}))}</span><span>✓ Hadir${h.time ? ' · '+esc(h.time)+' WIB' : ''}</span></div>`).join(''):'<div class="empty" style="padding:22px 0">Belum ada catatan kehadiran.</div>';
- $('tableLoading').hidden=true;renderRows();updateMark();
-}
-function updateMark(){
- const me=state.data.find(s=>s.id===state.user?.id);
- let label='Absen Masuk';
- let hint='Absen sekali per hari (WIB).';
- if(state.marking){
-  label='Mencatat kehadiran…';
- }else if(state.user?.mustChange){
-  label='Ganti password awal';
-  hint='Ganti password awal untuk mengaktifkan tombol absen.';
- }else if(!state.ready){
-  if(state.loading)label='Memuat data…';
-  else hint='Klik ikon perbarui jika data belum muncul.';
- }else if(me?.status==='HADIR'){
-  label='Kehadiran tercatat';
-  hint=me.time?'Tercatat pukul '+me.time+' WIB.':'Absen hari ini sudah disimpan.';
- }else if(me&&me.status!=='BELUM'){
-  label=statusName(me.status);
-  hint='Tidak perlu absen pada tanggal ini.';
- }
- $('mark').disabled=!state.ready||state.loading||state.marking||state.user?.mustChange||me?.status!=='BELUM';
- $('markLabel').textContent=label;
- $('markHint').textContent=hint;
-}
-function renderRows(){
- const q=$('search').value.trim().toLowerCase();
- const data=state.data.filter(s=>{const matches=(s.name+' '+s.id).toLowerCase().includes(q);const category=state.filter==='ALL'||(state.filter==='OFF'?!['HADIR','BELUM'].includes(s.status):s.status===state.filter);return matches&&category;});
- $('staffRows').innerHTML=data.map(s=>`<tr><td><div class="staff"><div class="avatar">${esc(initials(s.name))}</div><div><div class="staff-name">${esc(s.name)}${s.id===state.user?.id?'<span class="you">Anda</span>':''}</div><div class="staff-id">${esc(s.id)}</div></div></div></td><td class="role-col"><span class="role">KS</span></td><td><span class="badge ${esc(s.status)}">${esc(statusName(s.status))}</span></td><td class="time-col">${esc(s.time||'—')}</td></tr>`).join('');
- $('staffTable').hidden=!data.length;$('empty').hidden=!!data.length;$('rowCount').textContent='Menampilkan '+data.length+' dari '+state.data.length+' staff';
-}
-$('loginForm').addEventListener('submit',async e=>{
- e.preventDefault();$('loginError').textContent='';$('loginButton').disabled=true;$('loginButton').textContent='Memeriksa akun…';const epoch=++state.epoch;
- try{const r=await call('login',{username:$('loginUsername').value,password:$('loginPassword').value});if(epoch!==state.epoch)return;if(!r.ok)throw new Error(r.message);saveToken(r.token);state.user=r.user;$('loginPassword').value='';showApp();await load();}
- catch(e){$('loginError').textContent=e.message;}
- finally{$('loginButton').disabled=false;$('loginButton').innerHTML='Masuk ke dashboard <svg><use href="#i-arrow"/></svg>';}
-});
-$('togglePassword').onclick=()=>{const hidden=$('loginPassword').type==='password';$('loginPassword').type=hidden?'text':'password';$('togglePassword').textContent=hidden?'Tutup':'Lihat';$('togglePassword').setAttribute('aria-label',hidden?'Sembunyikan password':'Tampilkan password');};
-$('logout').onclick=()=>logout();$('refresh').onclick=()=>load();$('search').addEventListener('input',renderRows);
-document.querySelectorAll('[data-filter]').forEach(btn=>btn.onclick=()=>{state.filter=btn.dataset.filter;document.querySelectorAll('[data-filter]').forEach(b=>{b.classList.toggle('active',b===btn);b.setAttribute('aria-pressed',String(b===btn));});renderRows();});
-$('mark').onclick=async()=>{
- if($('mark').disabled)return;const epoch=state.epoch;state.marking=true;updateMark();
- try{const r=await call('mark',{date:state.date});if(epoch!==state.epoch)return;if(r.expired){logout(r.message);return;}toast(r.message);if(!r.ok&&!r.refresh)return;}
- catch(e){if(epoch===state.epoch)toast('Belum dapat memastikan hasil: '+e.message+' Data akan diperiksa ulang.');}
- finally{if(epoch===state.epoch){state.marking=false;state.ready=false;updateMark();await load();}}
-};
-function openPassword(required=false){$('passwordForm').reset();$('passwordError').textContent='';$('passwordDescription').textContent=required?'Ganti password awal sebelum mencatat kehadiran. Gunakan minimal 8 karakter.':'Gunakan password baru minimal 8 karakter.';$('cancelPassword').textContent=required?'Keluar':'Batal';$('passwordModal').hidden=false;$('currentPassword').focus();}
-$('passwordOpen').onclick=()=>openPassword(state.user?.mustChange);$('cancelPassword').onclick=()=>{if(state.user?.mustChange)logout();else $('passwordModal').hidden=true;};
-$('passwordForm').addEventListener('submit',async e=>{
- e.preventDefault();$('passwordError').textContent='';if($('newPassword').value!==$('confirmPassword').value){$('passwordError').textContent='Ulangan password belum sama.';return;}
- const epoch=state.epoch;state.changing=true;$('savePassword').disabled=true;$('cancelPassword').disabled=true;
- try{const r=await call('password',{current:$('currentPassword').value,password:$('newPassword').value});if(epoch!==state.epoch)return;if(r.expired){logout(r.message);return;}if(!r.ok)throw new Error(r.message);saveToken(r.token);state.user.mustChange=false;$('passwordModal').hidden=true;$('passwordForm').reset();toast('Password berhasil diganti.');}
- catch(e){$('passwordError').textContent=e.message;}
- finally{state.changing=false;$('savePassword').disabled=false;$('cancelPassword').disabled=false;if(epoch===state.epoch)await load();}
-});
-$('passwordModal').addEventListener('keydown',e=>{if(e.key==='Escape'&&!state.user?.mustChange&&!state.changing)$('passwordModal').hidden=true;if(e.key==='Tab'){const inputs=[...$('passwordForm').querySelectorAll('input,button')].filter(e=>!e.disabled);const a=inputs[0],z=inputs[inputs.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus();}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus();}}});
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)load();else clearTimeout(state.timer);});
-if(hasServer){
- try{state.token=localStorage.getItem(SESSION_KEY)||'';}catch(e){}
- if(state.token){showApp();load();}
-}else{
- $('localNotice').hidden=false;
- $('loginButton').disabled=true;
-}
-</script></body></html>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b171d">
+  <meta name="color-scheme" content="dark">
+  <title>Absensi Kasir · LINETOGEL</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%2260%22%20height%3D%2260%22%20rx%3D%2216%22%20fill%3D%22%23112f35%22%2F%3E%3Crect%20x%3D%2214%22%20y%3D%2214%22%20width%3D%2236%22%20height%3D%2236%22%20rx%3D%2210%22%20fill%3D%22%23b9f0d2%22%2F%3E%3Cpath%20d%3D%22m23%2032%206%206%2012-13%22%20fill%3D%22none%22%20stroke%3D%22%2313342c%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Geist:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: "DM Sans", "Segoe UI", sans-serif;
+      color: #eaf6f1;
+      background: #0b171d;
+      --ink: #eaf6f1;
+      --muted: #a9c1c3;
+      --green: #8bdcb6;
+      --line: #2a434a;
+      --mint: #b9f0d2;
+      --page: #0b171d;
+      --panel: #11232a;
+      --field: #0b1a20;
+      --raised: #162c32;
+      --shadow: 0 10px 26px #00000023;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; min-width: 0; }
+    [hidden] { display: none !important; }
+    html { scroll-padding-top: 20px; }
+    h1, h2, p { margin: 0; }
+    h1, h2, .metric-value, .ring-value { font-family: Geist, "Segoe UI", sans-serif; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: default; }
+    :focus-visible { outline: 2px solid var(--green); outline-offset: 4px; }
+    .icon {
+      width: 19px; height: 19px; flex: none; fill: none; stroke: currentColor;
+      stroke-width: 1.65; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .symbols { position: absolute; width: 0; height: 0; overflow: hidden; }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 700; letter-spacing: .075em; line-height: 1.1; }
+    .brand small { display: block; margin-top: 5px; font-size: .65rem; letter-spacing: .16em; }
+    .brand-mark {
+      display: grid; place-items: center; flex: none; width: 41px; height: 41px;
+      border-radius: 12px; color: #183e33; background: var(--mint);
+    }
+    .brand-mark .icon { width: 21px; height: 21px; }
+    .login {
+      min-height: 100vh; min-height: 100svh; display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      background: var(--page);
+    }
+    .login-art {
+      position: relative; isolation: isolate; overflow: hidden;
+      display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between;
+      min-width: 0; padding: clamp(28px, 5vw, 78px);
+      color: #effaf7; background: linear-gradient(145deg, #102b33 10%, #113d3c 100%);
+    }
+    .login-art::before {
+      content: ""; position: absolute; z-index: -1; inset: 0;
+      background-image: linear-gradient(#c6edde0c 1px, transparent 1px), linear-gradient(90deg, #c6edde0c 1px, transparent 1px);
+      background-size: 37px 37px;
+      mask-image: linear-gradient(130deg, transparent 17%, #000 100%);
+    }
+    .login-art::after {
+      content: ""; position: absolute; z-index: -1; width: min(62vw, 780px); aspect-ratio: 1;
+      bottom: -43%; right: -38%; border: 1px solid #90d6b96b; border-radius: 50%;
+      box-shadow: 0 0 0 38px #8dddb51a, 0 0 0 77px #8dddb50c, 0 0 0 117px #8dddb507;
+    }
+    .login-art .brand small, .sidebar .brand small { color: #aec9c3; }
+    .login-hero { padding-block: clamp(35px, 8vw, 114px); }
+    .login-hero h1 {
+      font-size: clamp(3.2rem, 7vw, 7rem); font-weight: 650; line-height: .96;
+      letter-spacing: -.075em; margin-top: 23px;
+    }
+    .login-hero h1 span { display: block; color: var(--mint); }
+    .login-hero p { margin-top: 23px; max-width: 34ch; line-height: 1.65; color: #bce0d5; }
+    .date-pill {
+      display: inline-flex; align-items: center; gap: 8px; min-height: 39px; padding: 8px 12px;
+      border: 1px solid var(--line); border-radius: 9px; background: var(--raised);
+      color: var(--muted); font-size: .8rem; font-weight: 600; width: fit-content;
+    }
+    .date-pill .icon { width: 16px; height: 16px; color: var(--green); }
+    .login-art .date-pill { background: #ecfff10c; color: #d5efe3; border-color: #a3d8c33a; }
+    .login-art .date-pill .icon { color: var(--mint); }
+    .form-area {
+      display: grid; place-items: center; min-width: 0; padding: clamp(24px, 5vw, 78px);
+      background: radial-gradient(ellipse at 83% 8%, #153038, transparent 60%), var(--page);
+    }
+    .login-form {
+      width: min(100%, 445px); padding: clamp(20px, 3vw, 35px);
+      border: 1px solid var(--line); border-radius: 18px; background: var(--panel);
+      box-shadow: 0 22px 60px #0000002e;
+    }
+    .login-form h2 { font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 750; letter-spacing: -.055em; }
+    .login-form > p { margin-top: 9px; color: var(--muted); line-height: 1.65; }
+    .field { display: grid; gap: 8px; margin-top: 21px; }
+    .field label { font-weight: 700; font-size: .86rem; }
+    .field input, .search input {
+      min-width: 0; width: 100%; color: var(--ink); border: 1px solid var(--line);
+      background: var(--field); border-radius: 9px; padding: 11px 12px;
+    }
+    .field input { min-height: 49px; }
+    .field input::placeholder, .search input::placeholder { color: #93adb1; }
+    .password-field { position: relative; }
+    .password-field input { padding-right: 78px; }
+    .password-toggle {
+      position: absolute; top: 5px; bottom: 5px; right: 5px; padding-inline: 9px;
+      border: 0; border-radius: 7px; background: none; color: var(--green); font-weight: 700; font-size: .8rem;
+    }
+    .password-toggle:hover { background: var(--raised); }
+    .primary {
+      display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%;
+      min-height: 46px; padding: 9px 13px; border: 1px solid transparent; border-radius: 9px;
+      color: #143c2d; background: var(--mint); font-weight: 750;
+    }
+    .primary:hover:not(:disabled) { background: #a5e4c2; }
+    .primary:disabled { opacity: .72; }
+    .login-form .primary { margin-top: 24px; }
+    .feedback {
+      padding: 12px 14px; border: 1px solid #784f4c; border-radius: 9px;
+      background: #322426; color: #ffcbc2; font-size: .85rem; line-height: 1.5;
+    }
+    .login-form .feedback { margin-top: 14px; color: #ffcbc2; }
+    .feedback[data-kind="ok"] { background: #173129; border-color: #325e4b; color: #b8edcf; }
+    .app { min-height: 100vh; }
+    .sidebar {
+      position: fixed; z-index: 1; inset: 0 auto 0 0; width: 222px; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 49px; padding: 29px 18px;
+      color: #edfaf3; background: linear-gradient(155deg, #102a34 6%, #123b37 100%);
+    }
+    .sidebar .brand { padding-inline: 7px; }
+    .side-links { display: grid; gap: 7px; }
+    .side-links button, .mobile-nav button {
+      display: flex; align-items: center; gap: 11px; min-height: 46px; padding: 8px 12px;
+      color: #cce1dc; background: transparent; border: 0; text-align: left;
+      font-size: .91rem; font-weight: 650; border-radius: 9px;
+    }
+    .side-links button:hover, .side-links button[aria-current="page"],
+    .mobile-nav button[aria-current="page"] { background: #d8f5e51b; color: #edfff3; }
+    .side-links button[aria-current="page"]::after {
+      content: ""; margin-left: auto; width: 6px; height: 6px; background: var(--mint); border-radius: 50%;
+    }
+    .mobile-nav { display: none; }
+    .workspace { margin-left: 222px; min-width: 0; }
+    .canvas { width: min(100%, 1490px); margin-inline: auto; padding: 0 clamp(16px, 2.7vw, 46px) 45px; }
+    .topbar {
+      color: var(--muted); min-height: 79px; display: flex; align-items: center;
+      justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line);
+    }
+    .topbar .brand { display: none; color: var(--ink); }
+    .crumb { font-size: .86rem; }
+    .crumb strong { color: var(--ink); margin-left: 5px; }
+    .top-actions { display: flex; align-items: center; gap: 12px; }
+    .initials {
+      display: grid; flex: none; place-items: center; width: 37px; height: 37px;
+      border-radius: 10px; background: #203d3d; color: #b8ead6; font-size: .76rem; font-weight: 800;
+    }
+    .account-avatar { border-radius: 50%; }
+    .secondary {
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 39px;
+      padding: 8px 11px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink);
+      background: var(--panel); font-size: .82rem; font-weight: 700; white-space: nowrap;
+    }
+    .secondary:hover:not(:disabled) { background: var(--raised); }
+    .secondary:disabled { opacity: .55; }
+    .secondary .icon { width: 16px; height: 16px; color: var(--green); }
+    .heading {
+      display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
+      margin: clamp(23px, 3vw, 37px) 0 24px;
+    }
+    .heading h1 { font-size: clamp(1.95rem, 3.5vw, 3.15rem); letter-spacing: -.065em; line-height: 1.06; }
+    .heading p { margin-top: 8px; color: var(--muted); overflow-wrap: anywhere; }
+    .summary-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15px; margin-bottom: 19px; }
+    .metric, .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 15px; box-shadow: var(--shadow); }
+    .metric { padding: 16px 19px; }
+    .metric-label { display: flex; justify-content: space-between; align-items: center; gap: 6px; color: var(--muted); font-size: .85rem; font-weight: 650; }
+    .metric-label .icon { color: var(--green); }
+    .metric-value { margin-top: 10px; font-size: clamp(1.9rem, 3.6vw, 2.7rem); line-height: 1; font-weight: 750; letter-spacing: -.06em; }
+    .metric.present { background: #162f29; border-color: #30584a; color: #a1e8c3; }
+    .metric.pending { background: #2d2a23; border-color: #504536; color: #f4ce8d; }
+    .metric.pending .icon { color: #f4ce8d; }
+    .content-grid {
+      display: grid; grid-template-columns: minmax(0, 1fr) minmax(245px, .44fr);
+      grid-template-areas: "history actions"; align-items: start; gap: 19px;
+    }
+    .content-grid > *, .right-col > * { min-width: 0; }
+    .content-grid[data-monitor="true"] { grid-template-columns: minmax(0, 1fr); grid-template-areas: "history"; }
+    .right-col { grid-area: actions; display: grid; gap: 15px; }
+    .workspace .feedback { margin-bottom: 15px; }
+    .checkin {
+      position: relative; isolation: isolate; overflow: hidden; padding: 20px;
+      background: linear-gradient(145deg, #102f37, #173e3a); border-color: #153d38; color: #effaf5;
+    }
+    .checkin::before {
+      content: ""; position: absolute; z-index: -1; top: -86px; right: -105px;
+      width: 205px; aspect-ratio: 1; border-radius: 50%; border: 1px solid #b1edcb50;
+      box-shadow: 0 0 0 22px #b1edcb12, 0 0 0 44px #b1edcb09;
+    }
+    .checkin-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .checkin-top h2 { font-size: 1.04rem; letter-spacing: -.025em; }
+    .profile-name { margin-top: 16px; overflow-wrap: anywhere; font-size: 1.25rem; font-weight: 700; }
+    .profile-meta { display: block; margin-top: 5px; font-size: .81rem; color: #b7d5ca; overflow-wrap: anywhere; }
+    .status {
+      display: inline-flex; align-items: center; gap: 6px; border-radius: 7px;
+      padding: 5px 7px; white-space: nowrap; background: #4c3d28; color: #fbe1a7; font-size: .71rem; font-weight: 750;
+    }
+    .status::before { content: ""; width: 6px; height: 6px; background: currentColor; border-radius: 50%; }
+    .status[data-present="true"] { background: #234d3d; color: #b8efcf; }
+    .checkin-date {
+      display: flex; gap: 8px; align-items: center; margin: 16px 0; padding: 13px 0;
+      border-block: 1px solid #d1ecdf36; color: #d0e5dc; font-size: .82rem;
+    }
+    .checkin-date .icon { width: 16px; height: 16px; }
+    .checkin-note { margin-top: 10px; color: #c1dacf; font-size: .79rem; text-align: center; line-height: 1.45; }
+    .progress-panel { padding: 19px; }
+    .progress-panel h2 { font-size: 1.02rem; letter-spacing: -.023em; }
+    .progress-content { display: flex; align-items: center; gap: 13px; margin-top: 13px; }
+    .ring {
+      display: grid; place-items: center; position: relative; flex: none;
+      width: 72px; height: 72px; border-radius: 50%; background: conic-gradient(#77d6a8 var(--percent, 0%), #2d464b 0%);
+    }
+    .ring::before { content: ""; position: absolute; inset: 6px; border-radius: 50%; background: var(--panel); }
+    .ring-value { position: relative; font-size: 1.08rem; font-weight: 750; letter-spacing: -.035em; }
+    .progress-copy { font-size: .82rem; color: var(--muted); line-height: 1.45; }
+    .history { grid-area: history; overflow: hidden; }
+    .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 17px 19px 12px; }
+    .panel-head h2 { font-size: 1.15rem; letter-spacing: -.02em; }
+    .live-status {
+      display: inline-flex; align-items: center; gap: 7px; min-height: 28px;
+      padding: 5px 9px; border: 1px solid var(--line); border-radius: 999px;
+      color: var(--muted); background: var(--field); font-size: .75rem; font-weight: 700; white-space: nowrap;
+    }
+    .live-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .live-status[data-state="live"] { color: var(--green); border-color: #30584a; background: #162f29; }
+    .live-status[data-state="retry"] { color: #f4ce8d; border-color: #594937; }
+    .table-tools { display: flex; flex-wrap: wrap; gap: 10px; padding: 0 19px 16px; }
+    .monitor-filters { display: flex; flex-wrap: wrap; gap: 6px; }
+    .monitor-filters [aria-pressed="true"] { background: #23463b; border-color: #507867; color: #c6f1da; }
+    .search { position: relative; width: min(100%, 288px); }
+    .search .icon {
+      position: absolute; top: 11px; left: 11px; width: 16px; height: 16px; color: var(--green); pointer-events: none;
+    }
+    .search input { padding: 8px 10px 8px 34px; min-height: 39px; font-size: .86rem; }
+    table { width: 100%; table-layout: fixed; border-collapse: collapse; text-align: left; }
+    th, td { padding: 11px 12px; border-block-start: 1px solid var(--line); }
+    tbody tr.sudah-absen { background: #19332d; }
+    th:first-child, td:first-child { padding-left: 19px; }
+    th:last-child, td:last-child { padding-right: 19px; text-align: right; }
+    th:last-child { width: 31%; }
+    th.role-col { width: 20%; }
+    th { color: var(--muted); background: var(--raised); font-weight: 700; font-size: .77rem; }
+    td { font-size: .85rem; }
+    .role { color: var(--muted); overflow-wrap: anywhere; }
+    .row-main { display: flex; align-items: center; gap: 9px; }
+    .row-main > div { min-width: 0; }
+    .row-main .initials { width: 32px; height: 32px; font-size: .68rem; border-radius: 8px; }
+    .name { font-weight: 750; overflow-wrap: anywhere; }
+    .staff-id { color: var(--muted); font-size: .74rem; margin-top: 2px; overflow-wrap: anywhere; }
+    .time-chip { display: inline-block; white-space: nowrap; background: #203e35; padding: 4px 7px; border-radius: 6px; color: #afe9c8; font-variant-numeric: tabular-nums; }
+    .status[data-present="false"] { background: #4c3d28; color: #fbe1a7; }
+    .monitor-time { display: block; margin-top: 5px; color: var(--muted); font-size: .75rem; font-variant-numeric: tabular-nums; }
+    .empty { margin: 0; padding: 28px 19px; color: var(--muted); text-align: center; border-top: 1px solid var(--line); }
+    .table-foot {
+      display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; padding: 11px 19px;
+      border-top: 1px solid var(--line); background: var(--field); color: var(--muted); font-size: .77rem;
+    }
+    @media (max-width: 1050px) {
+      .sidebar { width: 186px; padding-inline: 13px; }
+      .workspace { margin-left: 186px; }
+      .content-grid { gap: 14px; }
+    }
+    @media (max-width: 875px) {
+      .sidebar { display: none; }
+      .workspace { margin-left: 0; }
+      .topbar { min-height: 66px; }
+      .topbar .brand { display: flex; font-size: .89rem; }
+      .topbar .brand-mark { width: 33px; height: 33px; border-radius: 9px; }
+      .crumb { display: none; }
+      .mobile-nav { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 10px; }
+    }
+    @media (max-width: 640px) {
+      .login { grid-template-columns: minmax(0, 1fr); min-height: 100svh; grid-template-rows: auto 1fr; }
+      .login-art { padding: 20px; }
+      .login-art::after { width: 340px; right: -170px; bottom: -215px; }
+      .login-hero { padding: 16px 0 0; }
+      .login-hero h1 { margin-top: 13px; font-size: clamp(2.65rem, 9.5vw, 4rem); }
+      .login-hero h1 span { display: inline; }
+      .login-hero p { display: none; }
+      .form-area { align-items: start; padding: 17px 14px 26px; }
+      .login-form { border-radius: 14px; }
+      .login-form h2 { font-size: clamp(1.4rem, 6vw, 1.8rem); }
+      .field input, .search input { font-size: 1rem; }
+      .password-toggle { min-width: 44px; }
+      .secondary, .search input { min-height: 44px; }
+      .search .icon { top: 14px; }
+      .heading { align-items: flex-start; flex-direction: column; gap: 10px; margin-bottom: 17px; }
+      .heading .date-pill { min-height: 32px; padding-block: 5px; }
+      .summary-grid { gap: 8px; margin-bottom: 12px; }
+      .metric { padding: 10px; border-radius: 11px; }
+      .metric-label { align-items: flex-start; font-size: .74rem; }
+      .metric-label .icon { display: none; }
+      .metric-value { margin-top: 7px; }
+      .content-grid { display: flex; flex-direction: column; align-items: stretch; gap: 12px; }
+      .right-col { gap: 12px; }
+      .progress-panel { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+      .progress-content { margin-top: 0; gap: 8px; }
+      .ring { width: 53px; height: 53px; }
+      .ring::before { inset: 4px; }
+      .ring-value { font-size: .9rem; }
+      .progress-copy { max-width: 9ch; font-size: .75rem; }
+      .panel-head, .table-tools, .table-foot { padding-inline: 13px; }
+      th:first-child, td:first-child { padding-left: 13px; }
+      th:last-child, td:last-child { padding-right: 13px; }
+      th:last-child { width: 34%; }
+      .role-col { display: none; }
+      .monitor-filters { width: 100%; }
+      .monitor-filters button { flex: 1; justify-content: center; padding-inline: 7px; }
+    }
+    @media (max-width: 380px) {
+      .account-avatar { display: none; }
+      .panel-head { align-items: flex-start; }
+      .live-status { padding-inline: 7px; }
+      .row-main .initials { width: 25px; height: 25px; font-size: .59rem; }
+      .time-chip { padding-inline: 5px; font-size: .75rem; }
+    }
+  </style>
+</head>
+<body>
+  <svg class="symbols" aria-hidden="true">
+    <symbol id="i-check" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="m8 12 2.5 2.5L16 9"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-14 5h3m4 0h3"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2m2-15a3 3 0 0 1 0 6m1 4a5 5 0 0 1 3 5"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></symbol>
+    <symbol id="i-exit" viewBox="0 0 24 24"><path d="M10 4H5v16h5m4-12 4 4-4 4m-5-4h12"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+  </svg>
+
+  <main class="login" id="layar-login" hidden>
+    <div class="login-art">
+      <div class="brand">
+        <span class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>
+        <span>LINETOGEL<small>ABSENSI KASIR</small></span>
+      </div>
+      <div class="login-hero">
+        <div class="date-pill">
+          <svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg>
+          <span id="tanggal-login"></span>
+        </div>
+        <h1>Absensi <span>Kasir</span></h1>
+        <p>Catat kehadiran harian dan lihat riwayat absen tim dalam satu halaman.</p>
+      </div>
+    </div>
+    <div class="form-area">
+      <form class="login-form" id="form-login">
+        <h2>Masuk ke Absensi Kasir</h2>
+        <p>Gunakan username dan password staf.</p>
+        <div class="field">
+          <label for="username">Username</label>
+          <input id="username" name="username" autocomplete="username" autocapitalize="none"
+            spellcheck="false" placeholder="Username staf" maxlength="150" required>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="password-field">
+            <input id="password" name="password" type="password" autocomplete="current-password"
+              placeholder="Password staf" maxlength="200" required>
+            <button class="password-toggle" id="lihat-password" type="button" aria-controls="password">Lihat</button>
+          </div>
+        </div>
+        <button class="primary" id="masuk" type="submit">
+          <span id="teks-masuk">Masuk</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </button>
+        <p class="feedback" id="pesan-login" role="status" hidden></p>
+      </form>
+    </div>
+  </main>
+
+  <div class="app" id="layar-dashboard" hidden>
+    <aside class="sidebar" aria-label="Absensi Kasir">
+      <div class="brand">
+        <span class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>
+        <span>LINETOGEL<small>ABSENSI KASIR</small></span>
+      </div>
+      <nav class="side-links" aria-label="Navigasi dashboard">
+        <button type="button" data-view="dashboard" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg>Dashboard</button>
+        <button type="button" data-view="belum" hidden><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg>Belum Absen</button>
+        <button type="button" data-view="monitor" aria-current="page" hidden><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg>Pantau Absensi</button>
+      </nav>
+    </aside>
+    <main class="workspace" id="dashboard" tabindex="-1">
+      <div class="canvas">
+        <header class="topbar">
+          <p class="crumb">Absensi Kasir <strong>/ Dashboard</strong></p>
+          <div class="brand">
+            <span class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>
+            <span>LINETOGEL</span>
+          </div>
+          <div class="top-actions">
+            <span class="initials account-avatar" id="avatar-staf" aria-hidden="true"></span>
+            <button class="secondary" type="button" id="keluar">
+              <svg class="icon" aria-hidden="true"><use href="#i-exit"/></svg>Keluar
+            </button>
+          </div>
+        </header>
+        <nav class="mobile-nav" aria-label="Navigasi dashboard">
+          <button type="button" data-view="dashboard" aria-current="page">Dashboard</button>
+          <button type="button" data-view="belum" hidden>Belum Absen</button>
+          <button type="button" data-view="monitor" aria-current="page" hidden>Pantau Absensi</button>
+        </nav>
+
+        <section class="heading">
+          <div><h1 id="judul-dashboard" tabindex="-1">Absensi Kasir</h1><p id="nama-staf"></p></div>
+          <div class="date-pill">
+            <svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg>
+            <span id="tanggal-dashboard"></span>
+          </div>
+        </section>
+
+        <section class="summary-grid" aria-label="Ringkasan absensi hari ini">
+          <div class="metric">
+            <p class="metric-label">Total staf <svg class="icon" aria-hidden="true"><use href="#i-users"/></svg></p>
+            <p class="metric-value" id="total">—</p>
+          </div>
+          <div class="metric present">
+            <p class="metric-label">Sudah absen <svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></p>
+            <p class="metric-value" id="tercatat">—</p>
+          </div>
+          <div class="metric pending">
+            <p class="metric-label">Belum absen <svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></p>
+            <p class="metric-value" id="belum">—</p>
+          </div>
+        </section>
+
+        <p class="feedback" id="pesan-dashboard" role="status" hidden></p>
+
+        <div class="content-grid" id="konten-dashboard">
+          <aside class="right-col" id="panel-pribadi" aria-label="Ringkasan dan absensi pribadi" hidden>
+            <section class="panel checkin" id="presensi-saya" aria-labelledby="judul-absen" tabindex="-1">
+              <div class="checkin-top">
+                <h2 id="judul-absen">Absensi saya</h2>
+                <span class="status" id="status"><span id="status-text"></span></span>
+              </div>
+              <p class="profile-name" id="nama-profil">—</p>
+              <span class="profile-meta" id="role-staf"></span>
+              <div class="checkin-date">
+                <svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg>
+                <span id="tanggal-absen"></span>
+              </div>
+              <button type="button" class="primary" id="absen" disabled>
+                <svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span id="teks-absen">Absen sekarang</span>
+              </button>
+              <p class="checkin-note" id="keterangan-absen"></p>
+            </section>
+            <section class="panel progress-panel" aria-labelledby="judul-tim">
+              <h2 id="judul-tim">Progres kehadiran</h2>
+              <div class="progress-content">
+                <div class="ring" id="ring" aria-hidden="true"><span class="ring-value" id="persen">—</span></div>
+                <p class="progress-copy" id="ring-teks"></p>
+              </div>
+            </section>
+          </aside>
+
+          <section class="panel history" id="riwayat-tim" aria-labelledby="judul-riwayat" tabindex="-1">
+            <div class="panel-head">
+              <h2 id="judul-riwayat">Riwayat hari ini</h2>
+              <span class="live-status" id="status-live" role="status">Menghubungkan</span>
+            </div>
+            <div class="table-tools">
+              <div class="monitor-filters" id="filter-monitor" role="group" aria-label="Filter status absensi" hidden>
+                <button type="button" class="secondary" data-filter="semua" aria-pressed="true">Semua</button>
+                <button type="button" class="secondary" data-filter="sudah" aria-pressed="false">Sudah absen</button>
+                <button type="button" class="secondary" data-filter="belum" aria-pressed="false">Belum absen</button>
+              </div>
+              <div class="search">
+                <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
+                <input id="cari-staf" type="search" aria-label="Cari nama atau username staf" placeholder="Cari nama atau username" disabled>
+              </div>
+            </div>
+            <table id="tabel-riwayat" aria-labelledby="judul-riwayat" hidden>
+              <thead><tr><th scope="col">Staf</th><th scope="col" class="role-col">Bagian</th><th scope="col" id="judul-kolom-status">Jam masuk</th></tr></thead>
+              <tbody id="riwayat"></tbody>
+            </table>
+            <p class="empty" id="kosong" hidden>Belum ada absensi hari ini.</p>
+            <div class="table-foot"><span id="jumlah-riwayat"></span><span>Waktu Indonesia Barat</span></div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script>
+    // URL Web app untuk login, absensi, dan riwayat.
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYaHjXFKDOhce9npkIdu9HDsSg7rXprU0dVb3JY2punnRcXYzG89mpzY7TPGANXBS9Xw/exec';
+    const TZ = 'Asia/Jakarta';
+    const SESSION_KEY = 'ks-attendance-session:' + APPS_SCRIPT_URL;
+    const LEGACY_SESSION_KEY = 'ks-attendance-session-v1';
+    const STORAGE_TYPES = ['localStorage', 'sessionStorage'];
+    const el = (id) => document.getElementById(id);
+    const menus = [...document.querySelectorAll('[data-view]')];
+    const filterMonitor = [...document.querySelectorAll('[data-filter]')];
+    const zonaTanggal = new Intl.DateTimeFormat('en-CA', {
+      timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit',
+    });
+    const formatTanggal = new Intl.DateTimeFormat('id-ID', {
+      timeZone: TZ, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+    });
+
+    function penyimpanan(nama, key, value) {
+      try {
+        const tempat = window[nama];
+        if (value === undefined) return tempat.getItem(key) || '';
+        if (value === null) tempat.removeItem(key);
+        else tempat.setItem(key, value);
+      } catch (error) {
+        // Preview tertentu membatasi akses penyimpanan.
+        return '';
+      }
+      return '';
+    }
+
+    let token = penyimpanan('localStorage', SESSION_KEY) ||
+      penyimpanan('sessionStorage', SESSION_KEY) || penyimpanan('sessionStorage', LEGACY_SESSION_KEY);
+    let tanggalServer = '';
+    let selisihJam = 0;
+    let snapshot = null;
+    let aktif = null;
+    let permintaan = 0;
+    let muatBerikutnya = 0;
+    let gagalMuat = 0;
+    let halaman = 'dashboard';
+    let filter = 'semua';
+
+    function tanggalWib() {
+      const parts = Object.fromEntries(zonaTanggal.formatToParts(new Date(Date.now() + selisihJam))
+        .map(part => [part.type, part.value]));
+      return parts.year + '-' + parts.month + '-' + parts.day;
+    }
+
+    function labelTanggal(tanggal) {
+      return formatTanggal.format(tanggal ? new Date(tanggal + 'T12:00:00+07:00') : new Date());
+    }
+
+    function pesan(id, teks = '', jenis = 'error') {
+      const target = el(id);
+      target.textContent = teks;
+      target.dataset.kind = jenis;
+      target.hidden = !teks;
+    }
+
+    function simpanSesi(value) {
+      token = value;
+      for (const tempat of STORAGE_TYPES) {
+        penyimpanan(tempat, SESSION_KEY, value || null);
+      }
+      penyimpanan('sessionStorage', LEGACY_SESSION_KEY, null);
+    }
+
+    function logout(teks = '', focus = true) {
+      permintaan += 1;
+      aktif?.controller.abort();
+      aktif = null;
+      muatBerikutnya = 0;
+      gagalMuat = 0;
+      simpanSesi('');
+      snapshot = null;
+      tanggalServer = '';
+      halaman = 'dashboard';
+      filter = 'semua';
+      statusLive('loading');
+      el('layar-dashboard').removeAttribute('aria-busy');
+      el('layar-dashboard').hidden = true;
+      el('layar-login').hidden = false;
+      el('cari-staf').value = '';
+      el('password').value = '';
+      aturPassword(false);
+      pesan('pesan-dashboard');
+      pesan('pesan-login', teks);
+      if (focus) el('username').focus();
+    }
+
+    async function panggil(action, data, controller = new AbortController()) {
+      const batas = setTimeout(() => controller.abort(), 18000);
+      try {
+        const res = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+          body: JSON.stringify({ action, ...data }),
+          redirect: 'follow',
+          credentials: 'omit',
+          cache: 'no-store',
+          signal: controller.signal,
+        });
+        if (!res.ok) throw new Error('Koneksi gagal. Periksa URL /exec dan akses Web app.');
+        const hasil = await res.json().catch(() => null);
+        if (!hasil || typeof hasil.ok !== 'boolean') {
+          throw new Error('Respons Web app tidak dikenali. Periksa deployment Apps Script.');
+        }
+        if (!hasil.ok) {
+          const error = new Error(hasil.message || 'Permintaan gagal diproses.');
+          error.code = hasil.code;
+          throw error;
+        }
+        return hasil;
+      } catch (error) {
+        if (error.name === 'AbortError') {
+          throw new Error('Koneksi terlalu lama. Data akan diperiksa lagi secara otomatis.');
+        }
+        if (error instanceof TypeError) {
+          throw new Error('Tidak bisa terhubung ke Apps Script. Periksa jaringan dan setelan akses Web app.');
+        }
+        throw error;
+      } finally {
+        clearTimeout(batas);
+      }
+    }
+
+    function inisialNama(nama) {
+      return nama.trim().split(/\s+/).slice(0, 2).map(kata => kata[0] || '').join('').toUpperCase();
+    }
+
+    function buatBaris(data, tampilkanStatus) {
+      const baris = document.createElement('tr');
+      if (data.jam) baris.className = 'sudah-absen';
+      const staf = document.createElement('td');
+      const orang = document.createElement('div');
+      orang.className = 'row-main';
+      const inisial = document.createElement('span');
+      inisial.className = 'initials';
+      inisial.setAttribute('aria-hidden', 'true');
+      inisial.textContent = inisialNama(data.nama);
+      const detail = document.createElement('div');
+      const nama = document.createElement('p');
+      nama.className = 'name';
+      nama.textContent = data.nama;
+      const username = document.createElement('p');
+      username.className = 'staff-id';
+      username.textContent = data.username;
+      const role = document.createElement('td');
+      role.className = 'role role-col';
+      role.textContent = data.role || '—';
+      const kolomJam = document.createElement('td');
+      if (tampilkanStatus) {
+        const badge = document.createElement('span');
+        badge.className = 'status';
+        badge.dataset.present = Boolean(data.jam);
+        badge.textContent = data.jam ? 'Sudah absen' : 'Belum absen';
+        kolomJam.append(badge);
+      }
+      if (data.jam) {
+        const jam = document.createElement('time');
+        jam.className = tampilkanStatus ? 'monitor-time' : 'time-chip';
+        jam.dateTime = data.jam;
+        jam.textContent = data.jam;
+        kolomJam.append(jam);
+      }
+      detail.append(nama, username);
+      orang.append(inisial, detail);
+      staf.append(orang);
+      baris.append(staf, role, kolomJam);
+      return baris;
+    }
+
+    function tampilkanRiwayat() {
+      if (!snapshot) return;
+      const pantau = halaman === 'monitor';
+      const hanyaBelum = halaman === 'belum' || (pantau && filter === 'belum');
+      const hanyaSudah = halaman === 'dashboard' || (pantau && filter === 'sudah');
+      const pending = snapshot.belumAbsen;
+      const perluPending = !hanyaSudah;
+      const data = hanyaSudah ? snapshot.riwayat : hanyaBelum ? (pending || [])
+        : [...snapshot.riwayat, ...(pending || [])];
+      const cari = el('cari-staf').value.trim().toLowerCase();
+      const hasil = cari ? data.filter(staf =>
+        [staf.nama, staf.username].some(teks => teks.toLowerCase().includes(cari))) : data;
+      el('tabel-riwayat').hidden = hasil.length === 0;
+      el('kosong').hidden = hasil.length > 0;
+      let kosong = hanyaSudah ? 'Belum ada absensi hari ini.' : hanyaBelum
+        ? 'Semua staf wajib sudah absen hari ini.' : 'Belum ada staf wajib absen.';
+      if (perluPending && !pending) kosong = 'Daftar staf belum tersedia. Coba muat ulang setelah Apps Script diperbarui.';
+      if (perluPending && snapshot.tanggal !== tanggalServer) kosong = 'Data absensi untuk hari baru sedang dimuat.';
+      if (data.length && cari) kosong = 'Tidak ada staf yang cocok dengan pencarian.';
+      el('kosong').textContent = kosong;
+      el('riwayat').replaceChildren(...hasil.map(orang => buatBaris(orang, halaman !== 'dashboard')));
+      el('jumlah-riwayat').textContent = perluPending && !pending ? '' : cari
+        ? hasil.length + ' dari ' + data.length + ' staf' : data.length + ' staf';
+    }
+
+    function aturTampilan() {
+      const kapten = snapshot.kapten || snapshot.profil.role.trim().toLowerCase() === 'kapten';
+      if (kapten) halaman = 'monitor';
+      else if (halaman === 'monitor') halaman = 'dashboard';
+      for (const menu of menus) {
+        menu.hidden = kapten ? menu.dataset.view !== 'monitor' : menu.dataset.view === 'monitor';
+        if (menu.dataset.view === halaman) menu.setAttribute('aria-current', 'page');
+        else menu.removeAttribute('aria-current');
+      }
+      for (const tombol of filterMonitor) {
+        tombol.setAttribute('aria-pressed', String(tombol.dataset.filter === filter));
+      }
+      el('filter-monitor').hidden = !kapten;
+      el('panel-pribadi').hidden = halaman !== 'dashboard';
+      el('konten-dashboard').dataset.monitor = halaman !== 'dashboard';
+      el('judul-dashboard').textContent = kapten ? 'Pantau Absensi' : halaman === 'belum'
+        ? 'Belum Absen Hari Ini' : 'Absensi Kasir';
+      el('judul-riwayat').textContent = kapten ? 'Status absensi staf hari ini' : halaman === 'belum'
+        ? 'Daftar staf belum absen' : 'Riwayat hari ini';
+      el('judul-kolom-status').textContent = halaman === 'dashboard' ? 'Jam masuk' : 'Status';
+      tampilkanRiwayat();
+    }
+
+    function tampilkan(data, fokus = false) {
+      snapshot = data;
+      el('layar-login').hidden = true;
+      el('layar-dashboard').hidden = false;
+      el('nama-staf').textContent = 'Halo, ' + data.profil.nama;
+      el('nama-profil').textContent = data.profil.nama;
+      el('avatar-staf').textContent = inisialNama(data.profil.nama);
+      el('role-staf').textContent = [data.profil.role, data.profil.username].filter(Boolean).join(' · ');
+      const tanggal = labelTanggal(data.tanggal);
+      el('tanggal-dashboard').textContent = tanggal;
+      el('tanggal-absen').textContent = tanggal;
+      el('status').dataset.present = Boolean(data.saya);
+      el('status-text').textContent = data.saya ? 'Sudah absen' : 'Belum absen';
+      el('keterangan-absen').textContent = data.saya
+        ? 'Tercatat pukul ' + data.saya.jam + ' WIB.'
+        : 'Absen satu kali setiap hari, berdasarkan waktu WIB.';
+      el('teks-absen').textContent = data.saya ? 'Absen sudah tercatat' : 'Absen sekarang';
+      el('absen').disabled = Boolean(data.kapten || data.saya || aktif?.action === 'absen');
+      el('cari-staf').disabled = false;
+      el('tercatat').textContent = data.tercatat;
+      el('total').textContent = data.total;
+      el('belum').textContent = Math.max(0, data.total - data.tercatat);
+      const persen = data.total ? Math.min(100, Math.round(data.tercatat * 100 / data.total)) : 0;
+      el('ring').style.setProperty('--percent', persen + '%');
+      el('persen').textContent = persen + '%';
+      el('ring-teks').textContent = data.tercatat + ' dari ' + data.total + ' staf hadir';
+      aturTampilan();
+      if (fokus) el('judul-dashboard').focus();
+    }
+
+    const LABEL_LIVE = {
+      loading: 'Menghubungkan',
+      live: 'Live',
+      retry: 'Sambung ulang',
+    };
+
+    function statusLive(state) {
+      const status = el('status-live');
+      if (status.dataset.state === state) return;
+      status.dataset.state = state;
+      status.textContent = LABEL_LIVE[state];
+    }
+
+    function jedaLive() {
+      return halaman === 'monitor' ? 8000 : 15000;
+    }
+
+    function isiTampilan({ waktuServer, ...data }) {
+      return JSON.stringify(data);
+    }
+
+    function terimaDashboard(data, fokus) {
+      const sekarang = Date.now();
+      tanggalServer = data.tanggal;
+      if (Number.isFinite(data.waktuServer)) selisihJam = data.waktuServer - sekarang;
+      if (!snapshot || fokus || isiTampilan(data) !== isiTampilan(snapshot)) tampilkan(data, fokus);
+      else snapshot = data;
+      gagalMuat = 0;
+      muatBerikutnya = sekarang + jedaLive();
+      statusLive('live');
+    }
+
+    async function sinkron(action) {
+      if (!token) return;
+      const sedangAbsen = action === 'absen';
+      if (sedangAbsen && (!snapshot || halaman === 'monitor' || snapshot.saya)) return;
+      if (aktif && (!sedangAbsen || aktif.action === 'absen')) return;
+      aktif?.controller.abort();
+      const controller = new AbortController();
+      aktif = { action, controller };
+      const giliran = ++permintaan;
+      const muatanAwal = !snapshot;
+      if (muatanAwal) el('layar-dashboard').setAttribute('aria-busy', 'true');
+      if (sedangAbsen) {
+        el('absen').disabled = true;
+        el('teks-absen').textContent = 'Menyimpan…';
+        pesan('pesan-dashboard');
+      }
+      try {
+        const hasil = await panggil(action, { token, tanggal: snapshot?.tanggal }, controller);
+        if (giliran !== permintaan) return;
+        terimaDashboard(hasil.dashboard);
+        if (sedangAbsen) {
+          const info = hasil.gantiHari ? 'Hari sudah berganti. Silakan absen untuk tanggal baru.'
+            : hasil.tersimpan ? 'Absensi berhasil disimpan.' : 'Absensi hari ini sudah tercatat.';
+          pesan('pesan-dashboard', info, 'ok');
+        } else if (el('pesan-dashboard').dataset.kind === 'error') {
+          pesan('pesan-dashboard');
+        }
+      } catch (error) {
+        if (giliran !== permintaan) return;
+        if (error.code === 'SESSION') {
+          logout(error.message);
+        } else {
+          gagalMuat = Math.min(gagalMuat + 1, 3);
+          muatBerikutnya = Date.now() + Math.min(60000, jedaLive() * 2 ** gagalMuat);
+          statusLive('retry');
+          if (sedangAbsen || muatanAwal) pesan('pesan-dashboard', error.message);
+        }
+      } finally {
+        if (giliran === permintaan) {
+          aktif = null;
+          if (muatanAwal) el('layar-dashboard').removeAttribute('aria-busy');
+          el('absen').disabled = !snapshot || halaman === 'monitor' || Boolean(snapshot.saya);
+          if (snapshot) el('teks-absen').textContent = snapshot.saya ? 'Absen sudah tercatat' : 'Absen sekarang';
+        }
+      }
+    }
+
+    function aturPassword(terlihat) {
+      el('password').type = terlihat ? 'text' : 'password';
+      el('lihat-password').textContent = terlihat ? 'Sembunyikan' : 'Lihat';
+      el('lihat-password').setAttribute('aria-label', terlihat ? 'Sembunyikan password' : 'Tampilkan password');
+    }
+
+    el('form-login').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      pesan('pesan-login');
+      const tombol = el('masuk');
+      tombol.disabled = true;
+      el('teks-masuk').textContent = 'Memeriksa…';
+      try {
+        const hasil = await panggil('login', {
+          username: el('username').value.trim(),
+          password: el('password').value,
+        });
+        simpanSesi(hasil.token);
+        el('password').value = '';
+        aturPassword(false);
+        terimaDashboard(hasil.dashboard, true);
+      } catch (error) {
+        pesan('pesan-login', error.message);
+      } finally {
+        tombol.disabled = false;
+        el('teks-masuk').textContent = 'Masuk';
+      }
+    });
+
+    el('keluar').addEventListener('click', () => logout());
+    el('absen').addEventListener('click', () => sinkron('absen'));
+    el('cari-staf').addEventListener('input', tampilkanRiwayat);
+    el('lihat-password').addEventListener('click', () => aturPassword(el('password').type === 'password'));
+
+    for (const menu of menus) {
+      menu.addEventListener('click', () => {
+        if (!snapshot || menu.hidden || halaman === menu.dataset.view) return;
+        halaman = menu.dataset.view;
+        el('cari-staf').value = '';
+        aturTampilan();
+        el('judul-dashboard').focus();
+      });
+    }
+    for (const tombol of filterMonitor) {
+      tombol.addEventListener('click', () => {
+        if (!snapshot || halaman !== 'monitor') return;
+        filter = tombol.dataset.filter;
+        aturTampilan();
+      });
+    }
+
+    function perbaruiHari() {
+      const hari = tanggalWib();
+      el('tanggal-login').textContent = labelTanggal(hari);
+      if (!token || document.hidden) return;
+      if (snapshot && hari !== tanggalServer && hari !== snapshot.tanggal) {
+        tampilkan({ ...snapshot, tanggal: hari, saya: null, tercatat: 0, riwayat: [], belumAbsen: null });
+        pesan('pesan-dashboard');
+        muatBerikutnya = 0;
+      }
+      if (Date.now() >= muatBerikutnya) sinkron('dashboard');
+    }
+
+    setInterval(perbaruiHari, 1000);
+    function lanjutkanLive() {
+      if (!token || document.hidden) return;
+      muatBerikutnya = 0;
+      perbaruiHari();
+    }
+
+    document.addEventListener('visibilitychange', lanjutkanLive);
+    window.addEventListener('online', lanjutkanLive);
+    window.addEventListener('offline', () => {
+      if (token) statusLive('retry');
+    });
+    window.addEventListener('storage', (event) => {
+      if (event.key === SESSION_KEY && !event.newValue && token) logout('', false);
+    });
+    if (token) {
+      simpanSesi(token);
+      const tanggal = labelTanggal(tanggalWib());
+      el('tanggal-dashboard').textContent = tanggal;
+      el('tanggal-absen').textContent = tanggal;
+      el('layar-dashboard').hidden = false;
+    } else {
+      el('layar-login').hidden = false;
+    }
+    perbaruiHari();
+  </script>
+</body>
+</html>
