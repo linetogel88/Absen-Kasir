@@ -121,6 +121,26 @@
     .primary:hover:not(:disabled) { background: #a5e4c2; }
     .primary:disabled { opacity: .72; }
     .login-form .primary { margin-top: 24px; }
+    .password-help { margin-top: 6px; text-align: center; }
+    .password-help summary {
+      width: fit-content; min-height: 44px; margin-inline: auto; padding: 11px 5px;
+      color: var(--green); cursor: pointer; font-size: .86rem; font-weight: 650;
+    }
+    .password-help p {
+      padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px;
+      color: var(--ink); background: var(--field); font-size: .85rem; line-height: 1.5;
+    }
+    .password-dialog {
+      width: min(450px, calc(100% - 28px)); max-height: calc(100dvh - 28px);
+      padding: clamp(20px, 5vw, 28px); border: 1px solid var(--line); border-radius: 16px;
+      color: var(--ink); background: var(--panel); box-shadow: var(--shadow);
+    }
+    .password-dialog::backdrop { background: #060d12b8; }
+    .password-dialog h2 { font-size: 1.35rem; }
+    .password-dialog .field { margin-top: 14px; }
+    .mode-info { margin-top: 8px; color: var(--muted); font-size: .85rem; line-height: 1.55; }
+    .password-actions { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; margin-top: 18px; }
+    .password-dialog .feedback { margin-top: 12px; }
     .feedback {
       padding: 12px 14px; border: 1px solid #784f4c; border-radius: 9px;
       background: #322426; color: #ffcbc2; font-size: .85rem; line-height: 1.5;
@@ -328,6 +348,10 @@
       .row-main .initials { width: 25px; height: 25px; font-size: .59rem; }
       .time-chip { padding-inline: 5px; font-size: .75rem; }
     }
+    @media (max-width: 480px) {
+      .topbar { flex-wrap: wrap; padding-block: 8px; gap: 8px; }
+      .top-actions { flex-wrap: wrap; gap: 6px; }
+    }
   </style>
 </head>
 <body>
@@ -377,6 +401,10 @@
         <button class="primary" id="masuk" type="submit">
           <span id="teks-masuk">Masuk</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
         </button>
+        <details class="password-help">
+          <summary>Lupa Password?</summary>
+          <p>Hubungi Kapten atau CS yang bertugas.</p>
+        </details>
         <p class="feedback" id="pesan-login" role="status" hidden></p>
       </form>
     </div>
@@ -404,6 +432,7 @@
           </div>
           <div class="top-actions">
             <span class="initials account-avatar" id="avatar-staf" aria-hidden="true"></span>
+            <button class="secondary" type="button" id="ganti-password" disabled>Ganti password</button>
             <button class="secondary" type="button" id="keluar">
               <svg class="icon" aria-hidden="true"><use href="#i-exit"/></svg>Keluar
             </button>
@@ -494,6 +523,29 @@
       </div>
     </main>
   </div>
+  <dialog class="password-dialog" id="dialog-password" aria-labelledby="judul-password">
+    <form id="form-password">
+      <h2 id="judul-password">Ganti password</h2>
+      <p class="mode-info">Masukkan password lama dan password baru. Password baru boleh mulai dari 1 karakter.</p>
+      <div class="field">
+        <label for="password-lama">Password lama</label>
+        <input id="password-lama" type="password" autocomplete="current-password" maxlength="200" required>
+      </div>
+      <div class="field">
+        <label for="password-baru">Password baru</label>
+        <input id="password-baru" type="password" autocomplete="new-password" minlength="1" maxlength="200" required>
+      </div>
+      <div class="field">
+        <label for="password-konfirmasi">Ulangi password baru</label>
+        <input id="password-konfirmasi" type="password" autocomplete="new-password" maxlength="200" required>
+      </div>
+      <p class="feedback" id="pesan-password" role="status" hidden></p>
+      <div class="password-actions">
+        <button class="primary" id="simpan-password" type="submit">Simpan password</button>
+        <button class="secondary" id="batal-password" type="button">Batal</button>
+      </div>
+    </form>
+  </dialog>
   <script>
     // URL Web app untuk login, absensi, dan riwayat.
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyYaHjXFKDOhce9npkIdu9HDsSg7rXprU0dVb3JY2punnRcXYzG89mpzY7TPGANXBS9Xw/exec';
@@ -535,6 +587,7 @@
     let gagalMuat = 0;
     let halaman = 'dashboard';
     let filter = 'semua';
+    let prosesPassword = false;
 
     function tanggalWib() {
       const parts = Object.fromEntries(zonaTanggal.formatToParts(new Date(Date.now() + selisihJam))
@@ -554,9 +607,12 @@
     }
 
     function simpanSesi(value) {
+      const lama = token;
       token = value;
       for (const tempat of STORAGE_TYPES) {
-        penyimpanan(tempat, SESSION_KEY, value || null);
+        if (value || penyimpanan(tempat, SESSION_KEY) === lama) {
+          penyimpanan(tempat, SESSION_KEY, value || null);
+        }
       }
       penyimpanan('sessionStorage', LEGACY_SESSION_KEY, null);
     }
@@ -573,6 +629,8 @@
       halaman = 'dashboard';
       filter = 'semua';
       statusLive('loading');
+      el('ganti-password').disabled = true;
+      if (el('dialog-password').open) el('dialog-password').close();
       el('layar-dashboard').removeAttribute('aria-busy');
       el('layar-dashboard').hidden = true;
       el('layar-login').hidden = false;
@@ -733,6 +791,7 @@
       el('teks-absen').textContent = data.saya ? 'Absen sudah tercatat' : 'Absen sekarang';
       el('absen').disabled = Boolean(data.kapten || data.saya || aktif?.action === 'absen');
       el('cari-staf').disabled = false;
+      el('ganti-password').disabled = false;
       el('tercatat').textContent = data.tercatat;
       el('total').textContent = data.total;
       el('belum').textContent = Math.max(0, data.total - data.tercatat);
@@ -777,7 +836,7 @@
     }
 
     async function sinkron(action) {
-      if (!token) return;
+      if (!token || prosesPassword) return;
       const sedangAbsen = action === 'absen';
       if (sedangAbsen && (!snapshot || halaman === 'monitor' || snapshot.saya)) return;
       if (aktif && (!sedangAbsen || aktif.action === 'absen')) return;
@@ -828,6 +887,66 @@
       el('lihat-password').textContent = terlihat ? 'Sembunyikan' : 'Lihat';
       el('lihat-password').setAttribute('aria-label', terlihat ? 'Sembunyikan password' : 'Tampilkan password');
     }
+
+    el('ganti-password').addEventListener('click', () => {
+      if (!token || !snapshot) return;
+      el('form-password').reset();
+      pesan('pesan-password');
+      el('dialog-password').showModal();
+      el('password-lama').focus();
+    });
+    el('batal-password').addEventListener('click', () => el('dialog-password').close());
+    el('dialog-password').addEventListener('cancel', event => {
+      if (prosesPassword) event.preventDefault();
+    });
+    el('dialog-password').addEventListener('close', () => el('form-password').reset());
+    el('form-password').addEventListener('submit', async event => {
+      event.preventDefault();
+      if (prosesPassword || !token) return;
+      const baru = el('password-baru').value;
+      if (!baru || baru !== el('password-konfirmasi').value) {
+        pesan('pesan-password', 'Isi password baru dan pastikan kedua isian sama.');
+        return;
+      }
+      if (aktif?.action === 'absen') {
+        pesan('pesan-password', 'Tunggu sampai pencatatan absensi selesai, lalu coba lagi.');
+        return;
+      }
+      const sesi = token;
+      prosesPassword = true;
+      if (aktif) {
+        permintaan += 1;
+        aktif.controller.abort();
+        aktif = null;
+        el('layar-dashboard').removeAttribute('aria-busy');
+      }
+      const simpan = el('simpan-password');
+      simpan.disabled = true;
+      el('batal-password').disabled = true;
+      simpan.textContent = 'Menyimpan…';
+      pesan('pesan-password');
+      try {
+        const hasil = await panggil('gantiPassword', {
+          token: sesi,
+          passwordLama: el('password-lama').value,
+          passwordBaru: baru,
+        });
+        if (sesi !== token) return;
+        el('dialog-password').close();
+        simpanSesi(hasil.token);
+        pesan('pesan-dashboard', 'Password berhasil diganti.', 'ok');
+      } catch (error) {
+        if (sesi !== token) return;
+        if (error.code === 'SESSION') logout(error.message);
+        else pesan('pesan-password', error.message);
+      } finally {
+        prosesPassword = false;
+        simpan.disabled = false;
+        el('batal-password').disabled = false;
+        simpan.textContent = 'Simpan password';
+        lanjutkanLive();
+      }
+    });
 
     el('form-login').addEventListener('submit', async (event) => {
       event.preventDefault();
