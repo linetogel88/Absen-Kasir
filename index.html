@@ -113,6 +113,11 @@
       border: 0; border-radius: 7px; background: none; color: var(--green); font-weight: 700; font-size: .8rem;
     }
     .password-toggle:hover { background: var(--raised); }
+    .password-eye { display: grid; place-items: center; min-width: 44px; padding: 0; }
+    .password-eye .eye-off,
+    .password-eye[data-visible="true"] .eye-on { display: none; }
+    .password-eye[data-visible="true"] .eye-off { display: block; }
+    .password-dialog .password-field input { padding-right: 54px; }
     .primary {
       display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%;
       min-height: 46px; padding: 9px 13px; border: 1px solid transparent; border-radius: 9px;
@@ -364,6 +369,8 @@
     <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></symbol>
     <symbol id="i-exit" viewBox="0 0 24 24"><path d="M10 4H5v16h5m4-12 4 4-4 4m-5-4h12"/></symbol>
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.5"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="m3 3 18 18M6.2 6.9C3.4 8.8 2 12 2 12s3.5 6 10 6c1.4 0 2.7-.3 3.8-.7M10.2 6.2c.6-.1 1.2-.2 1.8-.2 6.5 0 10 6 10 6s-.9 1.6-2.5 3"/></symbol>
   </svg>
 
   <main class="login" id="layar-login" hidden>
@@ -529,15 +536,33 @@
       <p class="mode-info">Masukkan password lama dan password baru. Password baru boleh mulai dari 1 karakter.</p>
       <div class="field">
         <label for="password-lama">Password lama</label>
-        <input id="password-lama" type="password" autocomplete="current-password" maxlength="200" required>
+        <div class="password-field">
+          <input id="password-lama" type="password" autocomplete="current-password" autocapitalize="none" spellcheck="false" maxlength="200" required>
+          <button class="password-toggle password-eye" id="lihat-password-lama" type="button" aria-controls="password-lama" aria-label="Tampilkan password lama">
+            <svg class="icon eye-on" aria-hidden="true"><use href="#i-eye"/></svg>
+            <svg class="icon eye-off" aria-hidden="true"><use href="#i-eye-off"/></svg>
+          </button>
+        </div>
       </div>
       <div class="field">
         <label for="password-baru">Password baru</label>
-        <input id="password-baru" type="password" autocomplete="new-password" minlength="1" maxlength="200" required>
+        <div class="password-field">
+          <input id="password-baru" type="password" autocomplete="new-password" autocapitalize="none" spellcheck="false" minlength="1" maxlength="200" required>
+          <button class="password-toggle password-eye" id="lihat-password-baru" type="button" aria-controls="password-baru" aria-label="Tampilkan password baru">
+            <svg class="icon eye-on" aria-hidden="true"><use href="#i-eye"/></svg>
+            <svg class="icon eye-off" aria-hidden="true"><use href="#i-eye-off"/></svg>
+          </button>
+        </div>
       </div>
       <div class="field">
         <label for="password-konfirmasi">Ulangi password baru</label>
-        <input id="password-konfirmasi" type="password" autocomplete="new-password" maxlength="200" required>
+        <div class="password-field">
+          <input id="password-konfirmasi" type="password" autocomplete="new-password" autocapitalize="none" spellcheck="false" maxlength="200" required>
+          <button class="password-toggle password-eye" id="lihat-password-konfirmasi" type="button" aria-controls="password-konfirmasi" aria-label="Tampilkan ulangan password baru">
+            <svg class="icon eye-on" aria-hidden="true"><use href="#i-eye"/></svg>
+            <svg class="icon eye-off" aria-hidden="true"><use href="#i-eye-off"/></svg>
+          </button>
+        </div>
       </div>
       <p class="feedback" id="pesan-password" role="status" hidden></p>
       <div class="password-actions">
@@ -882,15 +907,28 @@
       }
     }
 
-    function aturPassword(terlihat) {
-      el('password').type = terlihat ? 'text' : 'password';
-      el('lihat-password').textContent = terlihat ? 'Sembunyikan' : 'Lihat';
-      el('lihat-password').setAttribute('aria-label', terlihat ? 'Sembunyikan password' : 'Tampilkan password');
+    function aturPassword(terlihat, id = 'password') {
+      const tombol = el('lihat-' + id);
+      const label = id === 'password-konfirmasi' ? 'ulangan password baru' : id.replace('-', ' ');
+      el(id).type = terlihat ? 'text' : 'password';
+      tombol.dataset.visible = String(terlihat);
+      if (id === 'password') tombol.textContent = terlihat ? 'Sembunyikan' : 'Lihat';
+      tombol.setAttribute('aria-label', (terlihat ? 'Sembunyikan ' : 'Tampilkan ') + label);
+    }
+
+    const kolomPassword = ['password-lama', 'password-baru', 'password-konfirmasi'];
+    for (const id of kolomPassword) {
+      el('lihat-' + id).addEventListener('click', () => aturPassword(el(id).type === 'password', id));
+    }
+
+    function bersihkanFormPassword() {
+      el('form-password').reset();
+      for (const id of kolomPassword) aturPassword(false, id);
     }
 
     el('ganti-password').addEventListener('click', () => {
       if (!token || !snapshot) return;
-      el('form-password').reset();
+      bersihkanFormPassword();
       pesan('pesan-password');
       el('dialog-password').showModal();
       el('password-lama').focus();
@@ -899,7 +937,7 @@
     el('dialog-password').addEventListener('cancel', event => {
       if (prosesPassword) event.preventDefault();
     });
-    el('dialog-password').addEventListener('close', () => el('form-password').reset());
+    el('dialog-password').addEventListener('close', bersihkanFormPassword);
     el('form-password').addEventListener('submit', async event => {
       event.preventDefault();
       if (prosesPassword || !token) return;
