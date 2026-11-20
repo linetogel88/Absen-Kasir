@@ -1169,7 +1169,7 @@
         filter = 'semua';
         el('cari-staf').value = '';
         if (halaman === 'rekap') {
-          muatRekap(tanggalRekap || geserTanggal(tanggalWib(), -1));
+          muatRekap(tanggalWib());
         } else {
           batalkanRekap();
           aturTampilan();
