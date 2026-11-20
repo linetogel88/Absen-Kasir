@@ -209,6 +209,25 @@
     .metric.present { background: #162f29; border-color: #30584a; color: #a1e8c3; }
     .metric.pending { background: #2d2a23; border-color: #504536; color: #f4ce8d; }
     .metric.pending .icon { color: #f4ce8d; }
+    .rekap-toolbar {
+      display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 14px;
+      margin-bottom: 15px; padding: 15px 19px;
+    }
+    .rekap-date-group { display: grid; gap: 7px; }
+    .rekap-date-group label { color: var(--muted); font-size: .81rem; font-weight: 700; }
+    .rekap-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+    .rekap-date {
+      min-width: 0; min-height: 42px; padding: 7px 9px; border: 1px solid var(--line);
+      border-radius: 9px; background: var(--field); color: var(--ink);
+    }
+    .rekap-result {
+      padding: 7px 11px; border: 1px solid var(--line); border-radius: 9px; background: var(--field);
+      color: var(--muted); font-size: .84rem; font-weight: 700; overflow-wrap: anywhere;
+    }
+    .rekap-result[data-state="complete"] { background: #162f29; border-color: #30584a; color: #a1e8c3; }
+    .rekap-result[data-state="pending"] { background: #2d2a23; border-color: #504536; color: #f4ce8d; }
+    .rekap-note { margin: 0 0 15px; color: var(--muted); font-size: .82rem; line-height: 1.5; }
+    .rekap-retry { margin-bottom: 15px; }
     .content-grid {
       display: grid; grid-template-columns: minmax(0, 1fr) minmax(245px, .44fr);
       grid-template-areas: "history actions"; align-items: start; gap: 19px;
@@ -320,6 +339,8 @@
       .login-form { border-radius: 14px; }
       .login-form h2 { font-size: clamp(1.4rem, 6vw, 1.8rem); }
       .field input, .search input { font-size: 1rem; }
+      .rekap-toolbar { padding: 12px; gap: 10px; }
+      .rekap-date { font-size: 1rem; min-height: 44px; }
       .password-toggle { min-width: 44px; }
       .secondary, .search input { min-height: 44px; }
       .search .icon { top: 14px; }
@@ -427,6 +448,7 @@
         <button type="button" data-view="dashboard" aria-current="page"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg>Dashboard</button>
         <button type="button" data-view="belum" hidden><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg>Belum Absen</button>
         <button type="button" data-view="monitor" aria-current="page" hidden><svg class="icon" aria-hidden="true"><use href="#i-users"/></svg>Pantau Absensi</button>
+        <button type="button" data-view="rekap" hidden><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg>Rekap Absensi</button>
       </nav>
     </aside>
     <main class="workspace" id="dashboard" tabindex="-1">
@@ -449,6 +471,7 @@
           <button type="button" data-view="dashboard" aria-current="page">Dashboard</button>
           <button type="button" data-view="belum" hidden>Belum Absen</button>
           <button type="button" data-view="monitor" aria-current="page" hidden>Pantau Absensi</button>
+          <button type="button" data-view="rekap" hidden>Rekap Absensi</button>
         </nav>
 
         <section class="heading">
@@ -459,7 +482,23 @@
           </div>
         </section>
 
-        <section class="summary-grid" aria-label="Ringkasan absensi hari ini">
+        <section class="panel rekap-toolbar" id="alat-rekap" aria-label="Pilih tanggal rekap" hidden>
+          <div class="rekap-date-group">
+            <label for="tanggal-rekap">Tanggal rekap (WIB)</label>
+            <div class="rekap-controls">
+              <button class="secondary" type="button" id="rekap-sebelum" aria-label="Tanggal sebelumnya">‹</button>
+              <input class="rekap-date" type="date" id="tanggal-rekap" required>
+              <button class="secondary" type="button" id="rekap-sesudah" aria-label="Tanggal berikutnya">›</button>
+            </div>
+          </div>
+          <div class="rekap-controls">
+            <button class="secondary" type="button" id="rekap-kemarin">Kemarin</button>
+            <button class="secondary" type="button" id="rekap-hari-ini">Hari ini</button>
+          </div>
+          <p class="rekap-result" id="hasil-rekap" role="status">Memuat rekap…</p>
+        </section>
+
+        <section class="summary-grid" aria-label="Ringkasan absensi">
           <div class="metric">
             <p class="metric-label">Total staf <svg class="icon" aria-hidden="true"><use href="#i-users"/></svg></p>
             <p class="metric-value" id="total">—</p>
@@ -474,6 +513,9 @@
           </div>
         </section>
 
+        <p class="rekap-note" id="keterangan-rekap" hidden></p>
+        <p class="feedback" id="pesan-rekap" role="status" hidden></p>
+        <button class="secondary rekap-retry" id="coba-rekap" type="button" hidden>Coba lagi</button>
         <p class="feedback" id="pesan-dashboard" role="status" hidden></p>
 
         <div class="content-grid" id="konten-dashboard">
@@ -613,6 +655,9 @@
     let halaman = 'dashboard';
     let filter = 'semua';
     let prosesPassword = false;
+    let tanggalRekap = '';
+    let dataRekap = null;
+    let permintaanRekap = null;
 
     function tanggalWib() {
       const parts = Object.fromEntries(zonaTanggal.formatToParts(new Date(Date.now() + selisihJam))
@@ -622,6 +667,18 @@
 
     function labelTanggal(tanggal) {
       return formatTanggal.format(tanggal ? new Date(tanggal + 'T12:00:00+07:00') : new Date());
+    }
+
+    function geserTanggal(tanggal, jumlahHari) {
+      const waktu = new Date(tanggal + 'T12:00:00Z');
+      if (!Number.isFinite(waktu.getTime())) return '';
+      waktu.setUTCDate(waktu.getUTCDate() + jumlahHari);
+      return waktu.toISOString().slice(0, 10);
+    }
+
+    function batalkanRekap() {
+      permintaanRekap?.abort();
+      permintaanRekap = null;
     }
 
     function pesan(id, teks = '', jenis = 'error') {
@@ -644,6 +701,9 @@
 
     function logout(teks = '', focus = true) {
       permintaan += 1;
+      batalkanRekap();
+      tanggalRekap = '';
+      dataRekap = null;
       aktif?.controller.abort();
       aktif = null;
       muatBerikutnya = 0;
@@ -751,13 +811,22 @@
 
     function tampilkanRiwayat() {
       if (!snapshot) return;
-      const pantau = halaman === 'monitor';
+      const arsip = halaman === 'rekap';
+      const sumber = arsip ? dataRekap : snapshot;
+      if (!sumber) {
+        el('tabel-riwayat').hidden = true;
+        el('kosong').hidden = true;
+        el('riwayat').replaceChildren();
+        el('jumlah-riwayat').textContent = '';
+        return;
+      }
+      const pantau = halaman === 'monitor' || arsip;
       const hanyaBelum = halaman === 'belum' || (pantau && filter === 'belum');
       const hanyaSudah = halaman === 'dashboard' || (pantau && filter === 'sudah');
-      const pending = snapshot.belumAbsen;
+      const pending = sumber.belumAbsen;
       const perluPending = !hanyaSudah;
-      const data = hanyaSudah ? snapshot.riwayat : hanyaBelum ? (pending || [])
-        : [...snapshot.riwayat, ...(pending || [])];
+      const data = hanyaSudah ? sumber.riwayat : hanyaBelum ? (pending || [])
+        : [...(pending || []), ...sumber.riwayat];
       const cari = el('cari-staf').value.trim().toLowerCase();
       const hasil = cari ? data.filter(staf =>
         [staf.nama, staf.username].some(teks => teks.toLowerCase().includes(cari))) : data;
@@ -765,8 +834,10 @@
       el('kosong').hidden = hasil.length > 0;
       let kosong = hanyaSudah ? 'Belum ada absensi hari ini.' : hanyaBelum
         ? 'Semua staf wajib sudah absen hari ini.' : 'Belum ada staf wajib absen.';
+      if (arsip) kosong = hanyaSudah ? 'Tidak ada catatan hadir pada tanggal ini.' : hanyaBelum
+        ? 'Tidak ada staf dengan status belum absen pada tanggal ini.' : 'Tidak ada data staf pada tanggal ini.';
       if (perluPending && !pending) kosong = 'Daftar staf belum tersedia. Coba muat ulang setelah Apps Script diperbarui.';
-      if (perluPending && snapshot.tanggal !== tanggalServer) kosong = 'Data absensi untuk hari baru sedang dimuat.';
+      if (!arsip && perluPending && snapshot.tanggal !== tanggalServer) kosong = 'Data absensi untuk hari baru sedang dimuat.';
       if (data.length && cari) kosong = 'Tidak ada staf yang cocok dengan pencarian.';
       el('kosong').textContent = kosong;
       el('riwayat').replaceChildren(...hasil.map(orang => buatBaris(orang, halaman !== 'dashboard')));
@@ -774,12 +845,79 @@
         ? hasil.length + ' dari ' + data.length + ' staf' : data.length + ' staf';
     }
 
+    function tampilkanRingkasan(data) {
+      el('tercatat').textContent = data?.tercatat ?? '—';
+      el('total').textContent = data?.total ?? '—';
+      el('belum').textContent = data ? Math.max(0, data.total - data.tercatat) : '—';
+    }
+
+    function aturKontrolRekap() {
+      el('tanggal-rekap').value = tanggalRekap;
+      el('tanggal-rekap').max = tanggalWib();
+      el('rekap-sesudah').disabled = !tanggalRekap || tanggalRekap >= tanggalWib();
+      el('rekap-sebelum').disabled = !tanggalRekap;
+    }
+
+    function tampilkanStatusRekap() {
+      const status = el('hasil-rekap');
+      const catatan = el('keterangan-rekap');
+      catatan.hidden = halaman !== 'rekap' || dataRekap?.sumberDaftar !== 'perkiraan';
+      catatan.textContent = 'Daftar staf untuk tanggal ini belum diarsipkan. Status belum absen mengacu pada daftar staf saat ini.';
+      if (!dataRekap) {
+        status.dataset.state = 'empty';
+        status.textContent = el('pesan-rekap').hidden ? 'Memuat rekap…' : 'Rekap belum terbuka';
+        return;
+      }
+      const sisa = Math.max(0, dataRekap.total - dataRekap.tercatat);
+      status.dataset.state = !dataRekap.total ? 'empty' : sisa ? 'pending' : 'complete';
+      status.textContent = !dataRekap.tercatat ? 'Tidak ada catatan hadir' : sisa
+        ? sisa + ' staf belum absen' : dataRekap.sumberDaftar === 'perkiraan'
+        ? 'Semua staf dalam daftar tercatat hadir' : 'Semua staf tercatat hadir';
+    }
+
+    async function muatRekap(tanggal) {
+      if (!token || halaman !== 'rekap' || prosesPassword || !tanggal || tanggal > tanggalWib()) return;
+      batalkanRekap();
+      const controller = new AbortController();
+      permintaanRekap = controller;
+      tanggalRekap = tanggal;
+      dataRekap = null;
+      pesan('pesan-rekap');
+      el('coba-rekap').hidden = true;
+      aturTampilan();
+      try {
+        const hasil = await panggil('rekap', { token, tanggal }, controller);
+        if (permintaanRekap !== controller || halaman !== 'rekap') return;
+        dataRekap = hasil.rekap;
+      } catch (error) {
+        if (permintaanRekap !== controller || halaman !== 'rekap') return;
+        if (error.code === 'SESSION') {
+          logout(error.message);
+          return;
+        }
+        pesan('pesan-rekap', error.code === 'REQUEST'
+          ? 'Perbarui deployment Apps Script ke versi yang mendukung Rekap Absensi.'
+          : error.message);
+        el('coba-rekap').hidden = false;
+      } finally {
+        if (permintaanRekap === controller) {
+          permintaanRekap = null;
+          aturTampilan();
+        }
+      }
+    }
+
     function aturTampilan() {
       const kapten = snapshot.kapten || snapshot.profil.role.trim().toLowerCase() === 'kapten';
-      if (kapten) halaman = 'monitor';
-      else if (halaman === 'monitor') halaman = 'dashboard';
+      if (kapten && halaman !== 'monitor' && halaman !== 'rekap') halaman = 'monitor';
+      else if (!kapten && (halaman === 'monitor' || halaman === 'rekap')) {
+        batalkanRekap();
+        halaman = 'dashboard';
+      }
+      const arsip = halaman === 'rekap';
       for (const menu of menus) {
-        menu.hidden = kapten ? menu.dataset.view !== 'monitor' : menu.dataset.view === 'monitor';
+        const menuKapten = menu.dataset.view === 'monitor' || menu.dataset.view === 'rekap';
+        menu.hidden = kapten !== menuKapten;
         if (menu.dataset.view === halaman) menu.setAttribute('aria-current', 'page');
         else menu.removeAttribute('aria-current');
       }
@@ -787,13 +925,24 @@
         tombol.setAttribute('aria-pressed', String(tombol.dataset.filter === filter));
       }
       el('filter-monitor').hidden = !kapten;
+      el('alat-rekap').hidden = !arsip;
+      el('status-live').hidden = arsip;
+      if (!arsip) {
+        pesan('pesan-rekap');
+        el('coba-rekap').hidden = true;
+      } else {
+        aturKontrolRekap();
+      }
+      el('tanggal-dashboard').textContent = labelTanggal(arsip && tanggalRekap ? tanggalRekap : snapshot.tanggal);
       el('panel-pribadi').hidden = halaman !== 'dashboard';
       el('konten-dashboard').dataset.monitor = halaman !== 'dashboard';
-      el('judul-dashboard').textContent = kapten ? 'Pantau Absensi' : halaman === 'belum'
+      el('judul-dashboard').textContent = arsip ? 'Rekap Absensi' : kapten ? 'Pantau Absensi' : halaman === 'belum'
         ? 'Belum Absen Hari Ini' : 'Absensi Kasir';
-      el('judul-riwayat').textContent = kapten ? 'Status absensi staf hari ini' : halaman === 'belum'
+      el('judul-riwayat').textContent = arsip ? 'Daftar Kehadiran' : kapten ? 'Status absensi staf hari ini' : halaman === 'belum'
         ? 'Daftar staf belum absen' : 'Riwayat hari ini';
       el('judul-kolom-status').textContent = halaman === 'dashboard' ? 'Jam masuk' : 'Status';
+      tampilkanRingkasan(arsip ? dataRekap : snapshot);
+      tampilkanStatusRekap();
       tampilkanRiwayat();
     }
 
@@ -806,7 +955,6 @@
       el('avatar-staf').textContent = inisialNama(data.profil.nama);
       el('role-staf').textContent = [data.profil.role, data.profil.username].filter(Boolean).join(' · ');
       const tanggal = labelTanggal(data.tanggal);
-      el('tanggal-dashboard').textContent = tanggal;
       el('tanggal-absen').textContent = tanggal;
       el('status').dataset.present = Boolean(data.saya);
       el('status-text').textContent = data.saya ? 'Sudah absen' : 'Belum absen';
@@ -817,9 +965,6 @@
       el('absen').disabled = Boolean(data.kapten || data.saya || aktif?.action === 'absen');
       el('cari-staf').disabled = false;
       el('ganti-password').disabled = false;
-      el('tercatat').textContent = data.tercatat;
-      el('total').textContent = data.total;
-      el('belum').textContent = Math.max(0, data.total - data.tercatat);
       const persen = data.total ? Math.min(100, Math.round(data.tercatat * 100 / data.total)) : 0;
       el('ring').style.setProperty('--percent', persen + '%');
       el('persen').textContent = persen + '%';
@@ -861,7 +1006,7 @@
     }
 
     async function sinkron(action) {
-      if (!token || prosesPassword) return;
+      if (!token || prosesPassword || halaman === 'rekap') return;
       const sedangAbsen = action === 'absen';
       if (sedangAbsen && (!snapshot || halaman === 'monitor' || snapshot.saya)) return;
       if (aktif && (!sedangAbsen || aktif.action === 'absen')) return;
@@ -952,6 +1097,7 @@
       }
       const sesi = token;
       prosesPassword = true;
+      batalkanRekap();
       if (aktif) {
         permintaan += 1;
         aktif.controller.abort();
@@ -982,7 +1128,8 @@
         simpan.disabled = false;
         el('batal-password').disabled = false;
         simpan.textContent = 'Simpan password';
-        lanjutkanLive();
+        if (halaman === 'rekap' && !dataRekap && tanggalRekap) muatRekap(tanggalRekap);
+        else lanjutkanLive();
       }
     });
 
@@ -1017,24 +1164,47 @@
     for (const menu of menus) {
       menu.addEventListener('click', () => {
         if (!snapshot || menu.hidden || halaman === menu.dataset.view) return;
+        const dariRekap = halaman === 'rekap';
         halaman = menu.dataset.view;
+        filter = 'semua';
         el('cari-staf').value = '';
-        aturTampilan();
+        if (halaman === 'rekap') {
+          muatRekap(tanggalRekap || geserTanggal(tanggalWib(), -1));
+        } else {
+          batalkanRekap();
+          aturTampilan();
+          if (dariRekap) lanjutkanLive();
+        }
         el('judul-dashboard').focus();
       });
     }
     for (const tombol of filterMonitor) {
       tombol.addEventListener('click', () => {
-        if (!snapshot || halaman !== 'monitor') return;
+        if (!snapshot || (halaman !== 'monitor' && halaman !== 'rekap')) return;
         filter = tombol.dataset.filter;
         aturTampilan();
       });
     }
 
+    el('tanggal-rekap').addEventListener('change', () => {
+      const tanggal = el('tanggal-rekap').value;
+      if (tanggal && tanggal <= tanggalWib()) muatRekap(tanggal);
+      else aturKontrolRekap();
+    });
+    el('rekap-sebelum').addEventListener('click', () => muatRekap(geserTanggal(tanggalRekap, -1)));
+    el('rekap-sesudah').addEventListener('click', () => muatRekap(geserTanggal(tanggalRekap, 1)));
+    el('rekap-kemarin').addEventListener('click', () => muatRekap(geserTanggal(tanggalWib(), -1)));
+    el('rekap-hari-ini').addEventListener('click', () => muatRekap(tanggalWib()));
+    el('coba-rekap').addEventListener('click', () => muatRekap(tanggalRekap));
+
     function perbaruiHari() {
       const hari = tanggalWib();
       el('tanggal-login').textContent = labelTanggal(hari);
       if (!token || document.hidden) return;
+      if (halaman === 'rekap') {
+        if (el('tanggal-rekap').max !== hari) aturKontrolRekap();
+        return;
+      }
       if (snapshot && hari !== tanggalServer && hari !== snapshot.tanggal) {
         tampilkan({ ...snapshot, tanggal: hari, saya: null, tercatat: 0, riwayat: [], belumAbsen: null });
         pesan('pesan-dashboard');
